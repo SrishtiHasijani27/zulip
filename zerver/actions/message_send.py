@@ -1505,9 +1505,9 @@ def check_message(
     original_message = message_content
     message.recipient = recipient
 
-    translate_message = translate_messages(original_message, message.recipient.type_id)
+    translated_message = translate_messages(original_message, message.recipient.type_id)
     print(f"translate_message", translate_message)
-    message.content = translate_message
+    message.content = translated_message
     message.realm = realm
     if addressee.is_stream():
         message.set_topic_name(topic_name)
