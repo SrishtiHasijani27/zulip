@@ -1502,7 +1502,9 @@ def check_message(
     message = Message()
     message.sender = sender
     message.content = message_content
+    original_message = message_content
     message.recipient = recipient
+
     translate_message = translate_messages(original_message, message.recipient.type_id)
     print(f"translate_message", translate_message)
     message.content = translate_message
