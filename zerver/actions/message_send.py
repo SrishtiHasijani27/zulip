@@ -98,6 +98,8 @@ from zerver.models import (
 )
 from zerver.tornado.django_api import send_event
 
+from zerver.lib.translate import translate_message
+
 
 def compute_irc_user_fullname(email: str) -> str:
     return Address(addr_spec=email).username + " (IRC)"
@@ -1501,6 +1503,9 @@ def check_message(
     message.sender = sender
     message.content = message_content
     message.recipient = recipient
+    translate_message = translate_messages(original_message, message.recipient.type_id)
+    print(f"translate_message", translate_message)
+    message.content = translate_message
     message.realm = realm
     if addressee.is_stream():
         message.set_topic_name(topic_name)
@@ -1764,3 +1769,13 @@ def internal_send_huddle_message(
         return None
     message_ids = do_send_messages([message])
     return message_ids[0]
+
+
+def translate_messages(message_content, recipient_id):
+    recipient_profile = UserProfile.objects.get(id=recipient_id)
+
+    preferred_language = recipient_profile.preferred_language
+
+    translated_content = translate_message(message_content, preferred_language)
+
+    return translated_content

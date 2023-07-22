@@ -152,6 +152,7 @@ def do_start_email_change_process(user_profile: UserProfile, new_email: str) -> 
         activate_url=activation_url,
     )
     language = user_profile.default_language
+    preferred_language = user_profile.preferred_language
     send_email(
         "zerver/emails/confirm_new_email",
         to_emails=[new_email],
@@ -440,6 +441,12 @@ def do_change_user_setting(
 
     send_event_on_commit(user_profile.realm, event, [user_profile.id])
 
+    if setting_name == "preferred_language":
+        assert isinstance(setting_value, str)
+        event["preferred_language_name"] = get_language_name(setting_value)
+
+    send_event_on_commit(user_profile.realm, event, [user_profile.id])
+
     if setting_name in UserProfile.notification_settings_legacy:
         # This legacy event format is for backwards-compatibility with
         # clients that don't support the new user_settings event type.
@@ -467,6 +474,14 @@ def do_change_user_setting(
             legacy_event["language_name"] = get_language_name(setting_value)
 
         send_event_on_commit(user_profile.realm, legacy_event, [user_profile.id])
+
+        if setting_name == "preferred_language":
+            assert isinstance(setting_value, str)
+            legacy_event["language_name"] = get_language_name(setting_value)
+            print(f"Language Name  get_language_name(setting_value)", get_language_name(setting_value))
+            print(f"Language Name get from Realm", user_profile.realm.preferred_language)
+        send_event_on_commit(user_profile.realm, legacy_event, [user_profile.id])
+        print(f"Language Name get from Realm in db", user_profile.preferred_language)
 
     # Updates to the time zone display setting are sent to all users
     if setting_name == "timezone":

@@ -87,6 +87,7 @@ def events_register_backend(
     if maybe_user_profile.is_authenticated:
         user_profile = maybe_user_profile
         spectator_requested_language = None
+        preferred_requested_language = None
         assert isinstance(user_profile, UserProfile)
         realm = user_profile.realm
         include_streams = True
@@ -152,6 +153,8 @@ def events_register_backend(
         client_capabilities=client_capabilities,
         fetch_event_types=fetch_event_types,
         spectator_requested_language=spectator_requested_language,
+        preferred_requested_language=preferred_requested_language,
         pronouns_field_type_supported=pronouns_field_type_supported,
     )
+    print(f"preferred_requested_language=preferred_requested_language",preferred_requested_language)
     return json_success(request, data=ret)

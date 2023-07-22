@@ -2,12 +2,13 @@ import $ from "jquery";
 import Cookies from "js-cookie";
 
 import render_dialog_default_language from "../templates/default_language_modal.hbs";
+import  preferred_language_modal_table from "../templates/preferred_language_modal.hbs"
 
 import * as channel from "./channel";
 import * as dialog_widget from "./dialog_widget";
 import * as emojisets from "./emojisets";
 import * as hash_util from "./hash_util";
-import {$t_html, get_language_list_columns, get_language_name} from "./i18n";
+import {$t_html, get_language_list_columns, get_preferred_language_list_columns,get_language_name} from "./i18n";
 import * as loading from "./loading";
 import * as overlays from "./overlays";
 import {page_params} from "./page_params";
@@ -24,8 +25,16 @@ export const user_settings_panel = {};
 
 export let user_default_language_name;
 
+export let user_preferred_language_name;
+
 export function set_default_language_name(name) {
     user_default_language_name = name;
+
+}
+
+export function set_preferred_language_name(preferred_language_name) {
+    user_preferred_language_name = preferred_language_name;
+     console.log("user_preferred_language_name",user_preferred_language_name)
 }
 
 function change_display_setting(data, $status_el, success_msg_html, sticky) {
@@ -43,6 +52,7 @@ function change_display_setting(data, $status_el, success_msg_html, sticky) {
         $status_el.data("sticky_msg_html", success_msg_html);
     }
     settings_ui.do_settings_change(channel.patch, "/json/settings", data, $status_el, opts);
+    console.log("do_settings_change",data)
 }
 
 function spectator_default_language_modal_post_render() {
@@ -92,9 +102,9 @@ function user_default_language_modal_post_render() {
             const data = {default_language: setting_value};
 
             const new_language = $link.attr("data-name");
-            $("#user-preferences .language_selection_widget .language_selection_button span").text(
-                new_language,
-            );
+            $(
+                "#user-display-settings .language_selection_widget .language_selection_button span",
+            ).text(new_language);
 
             change_display_setting(
                 data,
@@ -147,6 +157,92 @@ export function launch_default_language_setting_modal() {
         on_click() {},
     });
 }
+
+function spectator_preferred_language_modal_post_render() {
+    $("#preferred_language_selection_modal")
+        .find(".preferred_language")
+        .on("click", (e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            dialog_widget.close_modal();
+
+            const $link = $(e.target).closest("a[data-code]");
+            //Cookies.set(page_params.preferred_language_cookie_name, $link.attr("data-code"));
+            window.location.reload();
+        });
+}
+function user_preferred_language_modal_post_render() {
+
+    $("#preferred_language_selection_modal")
+        .find(".preferred_language")
+        .on("click", (e) => {
+
+            e.preventDefault();
+            e.stopPropagation();
+            dialog_widget.close_modal();
+
+            const $link = $(e.target).closest("a[data-code]");
+            const setting_value = $link.attr("data-code");
+            const data = {preferred_language: setting_value};
+
+            const new_preferred_language = $link.attr("data-name");
+            $(
+                "#user-display-settings .preferred_language_selection_widget .preferred_language_selection_button span",
+            ).text(new_preferred_language);
+
+            change_display_setting(
+                data,
+
+                $("#settings_content").find(".general-settings-status"),
+                $t_html(
+                    {
+                        defaultMessage:
+                            "Saved. ",
+                    },
+                    {
+                        "z-link": (content_html) =>
+                            `<a class='reload_link'>${content_html.join("")}</a>`,
+                    },
+                ),
+                true,
+            );
+
+        });
+}
+
+
+
+function preferred_language_modal_post_render() {
+    if (page_params.is_spectator) {
+        spectator_preferred_language_modal_post_render();
+    }
+    else {
+        user_preferred_language_modal_post_render();
+    }
+}
+
+export function launch_preferred_language_setting_modal() {
+    let selected_preferred_language = user_settings.preferred_language;
+
+
+    const html_body = preferred_language_modal_table({
+        language_list: get_preferred_language_list_columns(selected_preferred_language),
+    });
+
+    dialog_widget.launch({
+        html_heading: $t_html({defaultMessage: "Select language"}),
+        html_body,
+        html_submit_button: $t_html({defaultMessage: "Close"}),
+        id: "preferred_language_selection_modal",
+        close_on_submit: true,
+        focus_submit_on_open: true,
+        single_footer_button: true,
+        post_render: preferred_language_modal_post_render,
+        on_click() {},
+    });
+
+}
+
 
 export function set_up(settings_panel) {
     meta.loaded = true;
@@ -297,6 +393,10 @@ export function update_page(property) {
         $container.find(".default_language_name").text(user_default_language_name);
         return;
     }
+     if (property === "preferred_language") {
+        $container.find(".preferred_language").text(user_preferred_language_name);
+        return;
+    }
 
     // settings_org.set_input_element_value doesn't support radio
     // button widgets like these.
@@ -319,8 +419,11 @@ export function update_page(property) {
 export function initialize() {
     const user_language_name = get_language_name(user_settings.default_language);
     set_default_language_name(user_language_name);
+    const preferred_language_name=get_language_name(user_settings.preferred_language)
+    set_preferred_language_name(preferred_language_name)
+    console.log("preferred_language_name",preferred_language_name)
 
-    user_settings_panel.container = "#user-preferences";
+    user_settings_panel.container = "#user-display-settings";
     user_settings_panel.settings_object = user_settings;
     user_settings_panel.for_realm_settings = false;
 }

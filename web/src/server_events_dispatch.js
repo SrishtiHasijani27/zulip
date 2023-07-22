@@ -202,6 +202,7 @@ export function dispatch_normal_event(event) {
                 default_code_block_language: noop,
                 default_language: noop,
                 delete_own_message_policy: noop,
+                preferred_language: noop,
                 description: noop,
                 digest_emails_enabled: noop,
                 digest_weekday: noop,
@@ -673,6 +674,7 @@ export function dispatch_normal_event(event) {
             const user_display_settings = [
                 "color_scheme",
                 "default_language",
+                "preferred_language",
                 "default_view",
                 "demote_inactive_streams",
                 "dense_mode",
@@ -704,6 +706,17 @@ export function dispatch_normal_event(event) {
                 // cannot rerender with the new language the strings
                 // present in the backend/Jinja2 templates.
                 settings_display.set_default_language_name(event.language_name);
+            }
+               if (event.property === "preferred_language") {
+                // We additionally need to set the preferred language name.
+                //
+                // Note that this does not change translations at all;
+                // a reload is fundamentally required because we
+                // cannot rerender with the new language the strings
+                // present in the backend/Jinja2 templates.
+
+                settings_display.set_preferred_language_name(event.preferred_language_name);
+                console.log("set_preferred_language_name(event.preferred_language_name);",event.preferred_language_name)
             }
             if (
                 event.property === "default_view" && // If current hash is empty (default view), and the
