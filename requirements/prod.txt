@@ -172,11 +172,6 @@ backoff==2.2.1 \
     --hash=sha256:03f829f5bb1923180821643f8753b0502c3b682293992485b0eef2807afa5cba \
     --hash=sha256:63579f9a0628e06278f7e47b7d7d5b6ce20dc65c5e96a6f3ca99a6adca0396e8
     # via -r requirements/common.in
-https://github.com/andersk/zoneinfo/archive/f9687abaea8453be1c8d0e21544bd557d65af933.zip#egg=backports.zoneinfo==0.2.1+git ; python_version < "3.9" \
-    --hash=sha256:23938590401ee45d88f37a5caa538b410ffa827169965a0bcf387da13b695450
-    # via
-    #   -r requirements/common.in
-    #   django
 beautifulsoup4==4.12.2 \
     --hash=sha256:492bbc69dca35d12daac71c4db1bfff0c876c00ef4a2ffacce226d4638eb72da \
     --hash=sha256:bd2520ca0d9d7d12694a53d44ac482d181b4ec1888909b035a3dbf40d0f57d4a
@@ -359,7 +354,9 @@ circuitbreaker==2.0.0 \
 click==8.1.6 \
     --hash=sha256:48ee849951919527a045bfe3bf7baa8a959c423134e1a5b98c05c20ba75a1cbd \
     --hash=sha256:fa244bb30b3b5ee2cae3da8f55c9e5e0c0e86093306301fb418eb9dc40fbded5
-    # via zulip
+    # via
+    #   translate
+    #   zulip
 cryptography==41.0.2 \
     --hash=sha256:01f1d9e537f9a15b037d5d9ee442b8c22e3ae11ce65ea1f3316a41c78756b711 \
     --hash=sha256:079347de771f9282fbfe0e0236c716686950c19dee1b76240ab09ce1624d76d7 \
@@ -798,21 +795,6 @@ idna==3.4 \
     #   anyio
     #   requests
     #   yarl
-importlib-metadata==6.8.0 ; python_version < "3.10" \
-    --hash=sha256:3ebb78df84a805d7698245025b975d9d67053cd94c79245ba4b3eb694abe68bb \
-    --hash=sha256:dbace7892d8c0c4ac1ad096662232f831d4e64f4c4545bd53016a3e9d4654743
-    # via
-    #   -r requirements/common.in
-    #   markdown
-    #   zulip-bots
-importlib-resources==5.13.0 ; python_version < "3.9" \
-    --hash=sha256:82d5c6cca930697dbbd86c93333bb2c2e72861d4789a11c2662b933e5ad2b528 \
-    --hash=sha256:9f7bd0c97b79972a6cce36a366356d16d5e13b09679c11a58f1014bfdf8e64b2
-    # via
-    #   -r requirements/common.in
-    #   jsonschema
-    #   jsonschema-specifications
-    #   openapi-spec-validator
 ipython==8.12.2 \
     --hash=sha256:c7b80eb7f5a855a88efc971fda506ff7a91c280b42cdae26643e0f601ea281ea \
     --hash=sha256:ea8801f15dfe4ffb76dea1b09b847430ffd70d827b41735c64a0638a04103bfc
@@ -906,6 +888,10 @@ lazy-object-proxy==1.9.0 \
     --hash=sha256:f2457189d8257dd41ae9b434ba33298aec198e30adf2dcdaaa3a28b9994f6adb \
     --hash=sha256:f699ac1c768270c9e384e4cbd268d6e67aebcfae6cd623b4d7c3bfde5a35db59
     # via openapi-spec-validator
+libretranslatepy==2.1.1 \
+    --hash=sha256:3f28e1b990ba5f514ae215c08ace0c4e2327eeccaa356983aefbca3a25ecc568 \
+    --hash=sha256:bf9f8b0003c94f34e141553b7ec0a02876297c06955f5efea49afbc9f85303a9
+    # via translate
 lxml==4.9.3 \
     --hash=sha256:05186a0f1346ae12553d66df1cfce6f251589fea3ad3da4f3ef4e34b2d58c6a3 \
     --hash=sha256:075b731ddd9e7f68ad24c635374211376aa05a281673ede86cbe1d1b3455279d \
@@ -1004,6 +990,7 @@ lxml==4.9.3 \
     #   pyoembed
     #   python3-saml
     #   talon-core
+    #   translate
     #   xmlsec
     #   zulip-bots
 markdown==3.4.3 \
@@ -1324,10 +1311,6 @@ pillow==10.0.0 \
     --hash=sha256:f88a0b92277de8e3ca715a0d79d68dc82807457dae3ab8699c758f07c20b3c51 \
     --hash=sha256:faaf07ea35355b01a35cb442dd950d8f1bb5b040a7787791a535de13db15ed90
     # via -r requirements/common.in
-pkgutil-resolve-name==1.3.10 \
-    --hash=sha256:357d6c9e6a755653cfd78893817c0853af365dd51ec97f3d358a819373bbd174 \
-    --hash=sha256:ca27cc078d25c5ad71a9de0a7a330146c4e014c2462d9af19c6b828280649c5e
-    # via jsonschema
 polib==1.2.0 \
     --hash=sha256:1c77ee1b81feb31df9bca258cbc58db1bbb32d10214b173882452c73af06d62d \
     --hash=sha256:f3ef94aefed6e183e342a8a269ae1fc4742ba193186ad76f175938621dbfc26b
@@ -1719,6 +1702,7 @@ requests[security]==2.31.0 \
     #   requests-oauthlib
     #   social-auth-core
     #   stripe
+    #   translate
     #   twilio
     #   zulip
 requests-oauthlib==1.3.1 \
@@ -1967,6 +1951,10 @@ traitlets==5.9.0 \
     # via
     #   ipython
     #   matplotlib-inline
+translate==3.6.1 \
+    --hash=sha256:7e70ffa46f193cc744be7c88b8e1323f10f6b2bb90d24bb5d29fdf1e56618783 \
+    --hash=sha256:cebfb004989d9a2ab0d24c0c5805783c7f4e07243ea4ed2a8f1809d072bf712b
+    # via -r requirements/common.in
 twilio==8.5.0 \
     --hash=sha256:a6fdea2252cb7a8a47b5750d58abe1888bba9777482bac8e9bc3be47970facc7 \
     --hash=sha256:f55da9b485f9070aef09836e56230d0e6fd83811d2e6668f20d9057dd3668143
@@ -1978,11 +1966,6 @@ typing-extensions==4.7.1 \
     #   -r requirements/common.in
     #   asgiref
     #   django-stubs-ext
-    #   ipython
-    #   mypy-boto3-s3
-    #   mypy-boto3-ses
-    #   mypy-boto3-sns
-    #   mypy-boto3-sqs
     #   qrcode
     #   zulip
     #   zulip-bots
@@ -2112,12 +2095,6 @@ yarl==1.9.2 \
     --hash=sha256:f4e2d08f07a3d7d3e12549052eb5ad3eab1c349c53ac51c209a0e5991bbada78 \
     --hash=sha256:f7a3d8146575e08c29ed1cd287068e6d02f1c7bdff8970db96683b9591b86ee7
     # via aiohttp
-zipp==3.16.2 \
-    --hash=sha256:679e51dd4403591b2d6838a48de3d283f3d188412a9782faadf845f298736ba0 \
-    --hash=sha256:ebc15946aa78bd63458992fc81ec3b6f7b1e92d51c35e6de1c3804e73b799147
-    # via
-    #   importlib-metadata
-    #   importlib-resources
 https://github.com/zulip/python-zulip-api/archive/0.8.2.zip#egg=zulip==0.8.2+git&subdirectory=zulip \
     --hash=sha256:c85a2c76b265ef66478715bb2a38723c4942f84b2f876c3e0ba916962e3d0735
     # via
