@@ -193,11 +193,6 @@ backoff==2.2.1 \
     --hash=sha256:03f829f5bb1923180821643f8753b0502c3b682293992485b0eef2807afa5cba \
     --hash=sha256:63579f9a0628e06278f7e47b7d7d5b6ce20dc65c5e96a6f3ca99a6adca0396e8
     # via -r requirements/common.in
-https://github.com/andersk/zoneinfo/archive/f9687abaea8453be1c8d0e21544bd557d65af933.zip#egg=backports.zoneinfo==0.2.1+git ; python_version < "3.9" \
-    --hash=sha256:23938590401ee45d88f37a5caa538b410ffa827169965a0bcf387da13b695450
-    # via
-    #   -r requirements/common.in
-    #   django
 beautifulsoup4==4.12.2 \
     --hash=sha256:492bbc69dca35d12daac71c4db1bfff0c876c00ef4a2ffacce226d4638eb72da \
     --hash=sha256:bd2520ca0d9d7d12694a53d44ac482d181b4ec1888909b035a3dbf40d0f57d4a
@@ -444,6 +439,7 @@ click==8.1.6 \
     #   pip-tools
     #   pyre-check
     #   semgrep
+    #   translate
     #   zulip
 click-option-group==0.5.6 \
     --hash=sha256:38a26d963ee3ad93332ddf782f9259c5bdfe405e73408d943ef5e7d0c3767ec7 \
@@ -1023,23 +1019,6 @@ imagesize==1.4.1 \
     --hash=sha256:0d8d18d08f840c19d0ee7ca1fd82490fdc3729b7ac93f49870406ddde8ef8d8b \
     --hash=sha256:69150444affb9cb0d5cc5a92b3676f0b2fb7cd9ae39e947a5e11a36b4497cd4a
     # via sphinx
-importlib-metadata==6.8.0 ; python_version < "3.10" \
-    --hash=sha256:3ebb78df84a805d7698245025b975d9d67053cd94c79245ba4b3eb694abe68bb \
-    --hash=sha256:dbace7892d8c0c4ac1ad096662232f831d4e64f4c4545bd53016a3e9d4654743
-    # via
-    #   -r requirements/common.in
-    #   -r requirements/mypy.in
-    #   markdown
-    #   sphinx
-    #   zulip-bots
-importlib-resources==5.13.0 ; python_version < "3.9" \
-    --hash=sha256:82d5c6cca930697dbbd86c93333bb2c2e72861d4789a11c2662b933e5ad2b528 \
-    --hash=sha256:9f7bd0c97b79972a6cce36a366356d16d5e13b09679c11a58f1014bfdf8e64b2
-    # via
-    #   -r requirements/common.in
-    #   jsonschema
-    #   jsonschema-specifications
-    #   openapi-spec-validator
 incremental==22.10.0 \
     --hash=sha256:912feeb5e0f7e0188e6f42241d2f450002e11bbc0937c65865045854c24c0bd0 \
     --hash=sha256:b864a1f30885ee72c5ac2835a761b8fe8aa9c28b9395cacf27286602688d3e51
@@ -1193,6 +1172,10 @@ libcst==1.0.1 \
     --hash=sha256:ddd4e0eeec499d1c824ab545e62e957dbbd69a16bc4273208817638eb7d6b3c6 \
     --hash=sha256:f2cb687e1514625e91024e50a5d2e485c0ad3be24f199874ebf32b5de0346150
     # via pyre-check
+libretranslatepy==2.1.1 \
+    --hash=sha256:3f28e1b990ba5f514ae215c08ace0c4e2327eeccaa356983aefbca3a25ecc568 \
+    --hash=sha256:bf9f8b0003c94f34e141553b7ec0a02876297c06955f5efea49afbc9f85303a9
+    # via translate
 line-profiler==4.0.3 \
     --hash=sha256:0783704f6bdd6d1029c193bb270b9e540f5b97ded662c74885b609d4bc016bfa \
     --hash=sha256:0a5dad6fa4ebc70676574941a564cdae4e664bf54fd68a8f19799167a927a3db \
@@ -1338,6 +1321,7 @@ lxml==4.9.3 \
     #   python3-saml
     #   scrapy
     #   talon-core
+    #   translate
     #   xmlsec
     #   zulip-bots
 lxml-stubs==0.4.0 \
@@ -1772,10 +1756,6 @@ pip-tools==6.2.0 \
     --hash=sha256:77727ef7457d1865e61fe34c2b1439f9b971b570cc232616a22ce82ab89d357d \
     --hash=sha256:9ed38c73da4993e531694ea151f77048b4dbf2ba7b94c4a569daa39568cc6564
     # via -r requirements/dev.in
-pkgutil-resolve-name==1.3.10 \
-    --hash=sha256:357d6c9e6a755653cfd78893817c0853af365dd51ec97f3d358a819373bbd174 \
-    --hash=sha256:ca27cc078d25c5ad71a9de0a7a330146c4e014c2462d9af19c6b828280649c5e
-    # via jsonschema
 platformdirs==3.9.1 \
     --hash=sha256:1b42b450ad933e981d56e59f1b97495428c9bd60698baab9f3eb3d00d5822421 \
     --hash=sha256:ad8291ae0ae5072f66c16945166cb11c63394c7a3ad1b1bc9828ca3162da8c2f
@@ -2080,9 +2060,7 @@ python3-saml==1.15.0 \
 pytz==2023.3 \
     --hash=sha256:1d8ce29db189191fb55338ee6d0387d82ab59f3d00eac103412d64e0ebd0c588 \
     --hash=sha256:a151b3abb88eda1d4e34a9814df37de2a80e301e68ba0fd856fb9b46bfbbbffb
-    # via
-    #   babel
-    #   twilio
+    # via twilio
 pyuca==1.2 \
     --hash=sha256:8a382fe74627f08c0d18908c0713ca4a20aad5385f077579e56208beea2893b2 \
     --hash=sha256:abaa12e1bd2c7c68ca8396ff8383bc0654a739cef3ae68fd7af58bf29af0a91e
@@ -2263,6 +2241,7 @@ requests[security]==2.31.0 \
     #   sphinx
     #   stripe
     #   tldextract
+    #   translate
     #   twilio
     #   zulip
 requests-file==1.5.1 \
@@ -2745,6 +2724,10 @@ traitlets==5.9.0 \
     # via
     #   ipython
     #   matplotlib-inline
+translate==3.6.1 \
+    --hash=sha256:7e70ffa46f193cc744be7c88b8e1323f10f6b2bb90d24bb5d29fdf1e56618783 \
+    --hash=sha256:cebfb004989d9a2ab0d24c0c5805783c7f4e07243ea4ed2a8f1809d072bf712b
+    # via -r requirements/common.in
 twilio==8.5.0 \
     --hash=sha256:a6fdea2252cb7a8a47b5750d58abe1888bba9777482bac8e9bc3be47970facc7 \
     --hash=sha256:f55da9b485f9070aef09836e56230d0e6fd83811d2e6668f20d9057dd3668143
@@ -2874,22 +2857,13 @@ typing-extensions==4.7.1 \
     # via
     #   -r requirements/common.in
     #   asgiref
-    #   black
-    #   boto3-stubs
-    #   botocore-stubs
     #   django-stubs
     #   django-stubs-ext
-    #   ipython
     #   libcst
     #   mypy
-    #   mypy-boto3-s3
-    #   mypy-boto3-ses
-    #   mypy-boto3-sns
-    #   mypy-boto3-sqs
     #   pyre-check
     #   pyre-extensions
     #   qrcode
-    #   rich
     #   semgrep
     #   sqlalchemy2-stubs
     #   twisted
@@ -3121,12 +3095,6 @@ yarl==1.9.2 \
     --hash=sha256:f4e2d08f07a3d7d3e12549052eb5ad3eab1c349c53ac51c209a0e5991bbada78 \
     --hash=sha256:f7a3d8146575e08c29ed1cd287068e6d02f1c7bdff8970db96683b9591b86ee7
     # via aiohttp
-zipp==3.16.2 \
-    --hash=sha256:679e51dd4403591b2d6838a48de3d283f3d188412a9782faadf845f298736ba0 \
-    --hash=sha256:ebc15946aa78bd63458992fc81ec3b6f7b1e92d51c35e6de1c3804e73b799147
-    # via
-    #   importlib-metadata
-    #   importlib-resources
 zope.interface==6.0 \
     --hash=sha256:042f2381118b093714081fd82c98e3b189b68db38ee7d35b63c327c470ef8373 \
     --hash=sha256:0ec9653825f837fbddc4e4b603d90269b501486c11800d7c761eee7ce46d1bbb \
