@@ -260,10 +260,10 @@ def render_message_backend(
     message = Message()
     message.sender = user_profile
     message.realm = user_profile.realm
-    message.translated_content = content
+    message.content = content
     client = RequestNotes.get_notes(request).client
     assert client is not None
     message.sending_client = client
-    print(f"Content is translated for user")
+
     rendering_result = render_markdown(message, content, realm=user_profile.realm)
     return json_success(request, data={"rendered": rendering_result.rendered_content})
