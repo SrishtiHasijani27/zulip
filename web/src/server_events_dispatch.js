@@ -709,6 +709,7 @@ export function dispatch_normal_event(event) {
 
             }
                if (event.property === "preferred_language") {
+                   console.log("event.property==",event.property)
                 // We additionally need to set the preferred language name.
                 //
                 // Note that this does not change translations at all;
@@ -781,6 +782,13 @@ export function dispatch_normal_event(event) {
                 scroll_bar.set_layout_width();
             }
             if (event.property === "default_language") {
+                // TODO: Make this change the view immediately rather than
+                // requiring a reload.  This is likely fairly difficult,
+                // because various i18n strings are rendered by the
+                // server; we may want to instead just trigger a page
+                // reload.
+            }
+            if (event.property === "preferred_language") {
                 // TODO: Make this change the view immediately rather than
                 // requiring a reload.  This is likely fairly difficult,
                 // because various i18n strings are rendered by the
