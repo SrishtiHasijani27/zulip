@@ -596,6 +596,7 @@ def build_message_send_dict(
         email_gateway=email_gateway,
     )
     message.rendered_content = rendering_result.rendered_content
+    print(f"message.rendered_content" ,message.rendered_content)
     message.rendered_content_version = markdown_version
     links_for_embed = rendering_result.links_for_preview
 
@@ -1507,7 +1508,7 @@ def check_message(
     print(f"recepient name is ", recipient)
 
     translated_message = translate_messages(original_message, message.recipient.type_id)
-    print(f"translate_message", translate_message)
+    print(f"translate_message", translated_message)
     message.content = translated_message
 
     message.realm = realm

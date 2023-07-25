@@ -984,7 +984,7 @@ def render_markdown(
         mention_data=mention_data,
         email_gateway=email_gateway,
     )
-
+    print(f"Rendering result in message.py ", rendering_result)
     return rendering_result
 
 
