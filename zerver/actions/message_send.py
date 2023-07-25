@@ -861,6 +861,10 @@ def do_send_messages(
 
         ums: List[UserMessageLite] = []
         for send_request in send_message_requests:
+            if send_request.message.recipient.id:
+                send_request.message.content = send_request.message.translated_content
+
+        for send_request in send_message_requests:
             # Service bots (outgoing webhook bots and embedded bots) don't store UserMessage rows;
             # they will be processed later.
             mentioned_user_ids = send_request.rendering_result.mentions_user_ids
