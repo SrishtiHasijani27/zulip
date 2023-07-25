@@ -860,9 +860,12 @@ def do_send_messages(
                 send_request.message.save(update_fields=["has_attachment"])
 
         ums: List[UserMessageLite] = []
+
         for send_request in send_message_requests:
-            if send_request.message.recipient.type == Recipient.PERSONAL:
-                send_request.message.content = send_request.message.translated_content
+            msg = translate_messages(send_request.message.content, send_request.message.recipient.type_id)
+            send_request.message.content = msg
+            send_request.message.save(update_fields=["translated_content"])
+            print(f"Message translated and saved to DB",msg)
 
         for send_request in send_message_requests:
             # Service bots (outgoing webhook bots and embedded bots) don't store UserMessage rows;
@@ -1520,8 +1523,6 @@ def check_message(
 
     message.content = original_message
     message.translated_content = translated_message
-    message.save(update_fields=["translated_content"])
-    print(f"translated message saved ", Message.translated_content)
 
     message.realm = realm
     if addressee.is_stream():
