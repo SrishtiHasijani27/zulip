@@ -138,7 +138,7 @@ def send_message_backend(
     forged_str: Optional[str] = REQ("forged", default=None, documentation_pending=True),
     topic_name: Optional[str] = REQ_topic(),
     message_content: str = REQ("content"),
-    #message_content: str = REQ("translated_content"),
+    # message_content: str = REQ("translated_content"),
     widget_content: Optional[str] = REQ(default=None, documentation_pending=True),
     local_id: Optional[str] = REQ(default=None),
     queue_id: Optional[str] = REQ(default=None),

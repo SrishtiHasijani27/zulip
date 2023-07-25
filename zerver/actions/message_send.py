@@ -1520,6 +1520,8 @@ def check_message(
 
     message.content = original_message
     message.translated_content = translated_message
+    Message.save_translated_content(translated_message)
+    print(f"Translated message saved in DB", Message.translated_content)
 
     message.realm = realm
     if addressee.is_stream():
