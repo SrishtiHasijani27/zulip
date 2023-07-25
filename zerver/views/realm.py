@@ -84,6 +84,7 @@ def update_realm(
     ),
     allow_edit_history: Optional[bool] = REQ(json_validator=check_bool, default=None),
     default_language: Optional[str] = REQ(default=None),
+    preferred_language: Optional[str] = REQ(default=None),
     waiting_period_threshold: Optional[int] = REQ(converter=to_non_negative_int, default=None),
     authentication_methods: Optional[Dict[str, Any]] = REQ(
         json_validator=check_dict([]), default=None
@@ -158,6 +159,8 @@ def update_realm(
     # the entire request can succeed or fail atomically.
     if default_language is not None and default_language not in get_available_language_codes():
         raise JsonableError(_("Invalid language '{language}'").format(language=default_language))
+    if preferred_language is not None and preferred_language not in get_available_language_codes():
+        raise JsonableError(_("Invalid language '{language}'").format(language=preferred_language))
     if authentication_methods is not None:
         if not user_profile.is_realm_owner:
             raise OrganizationOwnerRequiredError

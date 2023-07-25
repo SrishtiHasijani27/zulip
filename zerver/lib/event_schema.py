@@ -84,7 +84,6 @@ subscription_fields: Sequence[Tuple[str, object]] = [
     ("wildcard_mentions_notify", OptionalType(bool)),
 ]
 
-
 value_type = UnionType(
     [
         # force vertical formatting
@@ -487,7 +486,6 @@ reaction_add_event = event_dict_type(
 )
 check_reaction_add = make_checker(reaction_add_event)
 
-
 reaction_remove_event = event_dict_type(
     required_keys=[
         ("type", Equals("reaction")),
@@ -820,7 +818,6 @@ realm_linkifiers_event = event_dict_type(
     ]
 )
 check_realm_linkifiers = make_checker(realm_linkifiers_event)
-
 
 plan_type_extra_data_type = DictType(
     required_keys=[
@@ -1475,6 +1472,10 @@ def check_update_display_settings(
         assert "language_name" in event
     else:
         assert "language_name" not in event.keys()
+    if setting_name == "preferred_language":
+        assert "preferred_language_name" in event
+    else:
+        assert "preferred_language_name" not in event.keys()
 
 
 def check_user_settings_update(
@@ -1496,6 +1497,10 @@ def check_user_settings_update(
         assert "language_name" in event
     else:
         assert "language_name" not in event.keys()
+    if setting_name == "preferred_language":
+        assert "preferred_language_name" in event
+    else:
+        assert "preferred_language_name" not in event.keys()
 
 
 update_global_notifications_event = event_dict_type(
@@ -1650,7 +1655,6 @@ update_message_flags_add_event = event_dict_type(
 )
 check_update_message_flags_add = make_checker(update_message_flags_add_event)
 
-
 update_message_flags_remove_event = event_dict_type(
     required_keys=[
         ("type", Equals("update_message_flags")),
@@ -1681,7 +1685,6 @@ update_message_flags_remove_event = event_dict_type(
     ],
 )
 check_update_message_flags_remove = make_checker(update_message_flags_remove_event)
-
 
 group_type = DictType(
     required_keys=[
@@ -1772,7 +1775,6 @@ user_group_add_subgroups_event = event_dict_type(
 )
 check_user_group_add_subgroups = make_checker(user_group_add_subgroups_event)
 
-
 user_group_remove_subgroups_event = event_dict_type(
     required_keys=[
         ("type", Equals("user_group")),
@@ -1782,7 +1784,6 @@ user_group_remove_subgroups_event = event_dict_type(
     ]
 )
 check_user_group_remove_subgroups = make_checker(user_group_remove_subgroups_event)
-
 
 user_status_event = event_dict_type(
     required_keys=[

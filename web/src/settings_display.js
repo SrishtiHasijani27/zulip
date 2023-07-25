@@ -242,7 +242,7 @@ export function launch_preferred_language_setting_modal() {
         post_render: preferred_language_modal_post_render,
         on_click() {},
     });
-
+console.log("After preferred_language_modal_post_render",selected_preferred_language)
 }
 
 
