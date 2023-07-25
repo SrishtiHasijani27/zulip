@@ -1521,8 +1521,13 @@ def check_message(
     translated_message = translate_messages(original_message, message.recipient.type_id)
     print(f"translate_message", translated_message)
 
-    message.content = original_message
-    message.translated_content = translated_message
+    # message.content = original_message
+    # message.translated_content = translated_message
+
+    if sender == recipient:
+        message.content = original_message
+    else:
+        message.content = translated_message
 
     message.realm = realm
     if addressee.is_stream():
@@ -1700,16 +1705,16 @@ def internal_prep_private_message(
         realm = recipient_user.realm
     else:
         realm = sender.realm
-
-    receiver = recipient_user.recipient.type_id
-    translated_msg = translate_messages(content, receiver)
-    print(f"Message translated for receiver",translated_msg)
+    #
+    # receiver = recipient_user.recipient.type_id
+    # translated_msg = translate_messages(content, receiver)
+    # print(f"Message translated for receiver",translated_msg)
 
     return _internal_prep_message(
         realm=realm,
         sender=sender,
         addressee=addressee,
-        content=translated_msg,
+        content=content,
         mention_backend=mention_backend,
         disable_external_notifications=disable_external_notifications,
     )
