@@ -865,7 +865,7 @@ def do_send_messages(
             msg = translate_messages(send_request.message.content, send_request.message.recipient.type_id)
             send_request.message.content = msg
             send_request.message.save(update_fields=["translated_content"])
-            print(f"Message translated and saved to DB",msg)
+            print(f"Message translated and saved to DB", msg)
 
         for send_request in send_message_requests:
             # Service bots (outgoing webhook bots and embedded bots) don't store UserMessage rows;
@@ -1701,11 +1701,15 @@ def internal_prep_private_message(
     else:
         realm = sender.realm
 
+    receiver = recipient_user.recipient.type_id
+    translated_msg = translate_messages(content, receiver)
+    print(f"Message translated for receiver",translated_msg)
+
     return _internal_prep_message(
         realm=realm,
         sender=sender,
         addressee=addressee,
-        content=content,
+        content=translated_msg,
         mention_backend=mention_backend,
         disable_external_notifications=disable_external_notifications,
     )
