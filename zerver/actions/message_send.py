@@ -861,7 +861,7 @@ def do_send_messages(
 
         ums: List[UserMessageLite] = []
         for send_request in send_message_requests:
-            if send_request.message.recipient.id:
+            if send_request.message.recipient.type == Recipient.PERSONAL:
                 send_request.message.content = send_request.message.translated_content
 
         for send_request in send_message_requests:
