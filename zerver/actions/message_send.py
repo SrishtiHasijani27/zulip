@@ -1501,7 +1501,7 @@ def check_message(
 
     message = Message()
     message.sender = sender
-    message.content = message_content
+    
     original_message = message_content
     message.recipient = recipient
 
