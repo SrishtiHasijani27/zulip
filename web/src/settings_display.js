@@ -184,6 +184,7 @@ function user_preferred_language_modal_post_render() {
             const $link = $(e.target).closest("a[data-code]");
             const setting_value = $link.attr("data-code");
             const data = {preferred_language: setting_value};
+            console.log("preferred language in setting display",data)
 
             const new_preferred_language = $link.attr("data-name");
             $(
@@ -223,6 +224,7 @@ function preferred_language_modal_post_render() {
 
 export function launch_preferred_language_setting_modal() {
     let selected_preferred_language = user_settings.preferred_language;
+    console.log("selected_preferred_language",selected_preferred_language)
 
 
     const html_body = preferred_language_modal_table({

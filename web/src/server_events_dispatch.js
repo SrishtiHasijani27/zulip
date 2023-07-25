@@ -706,6 +706,7 @@ export function dispatch_normal_event(event) {
                 // cannot rerender with the new language the strings
                 // present in the backend/Jinja2 templates.
                 settings_display.set_default_language_name(event.language_name);
+
             }
                if (event.property === "preferred_language") {
                 // We additionally need to set the preferred language name.
