@@ -1501,7 +1501,7 @@ def check_message(
 
     message = Message()
     message.sender = sender
-    
+
     original_message = message_content
     message.recipient = recipient
 
@@ -1779,6 +1779,7 @@ def translate_messages(message_content, recipient_id):
     recipient_profile = UserProfile.objects.get(id=recipient_id)
 
     preferred_language = recipient_profile.preferred_language
+    print(f"recipient_profile.preferred_language",preferred_language)
 
     translated_content = translate_message(message_content, preferred_language)
 
