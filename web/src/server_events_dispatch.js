@@ -699,6 +699,7 @@ export function dispatch_normal_event(event) {
                 user_settings[event.property] = event.value;
             }
             if (event.property === "default_language") {
+                console.log("default_language",event.property)
                 // We additionally need to set the language name.
                 //
                 // Note that this does not change translations at all;
