@@ -195,10 +195,10 @@ function user_preferred_language_modal_post_render() {
                 data,
 
                 $("#settings_content").find(".general-settings-status"),
-                $t_html(
+               $t_html(
                     {
                         defaultMessage:
-                            "Saved. ",
+                            "Saved. Please <z-link>reload</z-link> for the change to take effect.",
                     },
                     {
                         "z-link": (content_html) =>
@@ -207,10 +207,8 @@ function user_preferred_language_modal_post_render() {
                 ),
                 true,
             );
-
         });
 }
-
 
 
 function preferred_language_modal_post_render() {
