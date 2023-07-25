@@ -549,6 +549,7 @@ def build_message_send_dict(
     mention_backend: Optional[MentionBackend] = None,
     limit_unread_user_ids: Optional[Set[int]] = None,
     disable_external_notifications: bool = False,
+    translated_content: Optional[str] = None
 ) -> SendMessageRequest:
     """Returns a dictionary that can be passed into do_send_messages.  In
     production, this is always called by check_message, but some
@@ -676,6 +677,8 @@ def build_message_send_dict(
         limit_unread_user_ids=limit_unread_user_ids,
         disable_external_notifications=disable_external_notifications,
     )
+    if translated_content is not None:
+        message_send_dict["content"] = translated_content
 
     return message_send_dict
 
@@ -1509,7 +1512,8 @@ def check_message(
 
     translated_message = translate_messages(original_message, message.recipient.type_id)
     print(f"translate_message", translated_message)
-    message.content = translated_message
+    message.content = original_message
+
 
     message.realm = realm
     if addressee.is_stream():
@@ -1556,6 +1560,8 @@ def check_message(
         mention_backend=mention_backend,
         limit_unread_user_ids=limit_unread_user_ids,
         disable_external_notifications=disable_external_notifications,
+        translated_content=translated_message,
+
     )
 
     if (
