@@ -199,7 +199,7 @@ class SendMessageRequest:
     limit_unread_user_ids: Optional[Set[int]] = None
     service_queue_events: Optional[Dict[str, List[Dict[str, Any]]]] = None
     disable_external_notifications: bool = False
-
+    translated_content: Optional[str] = None
 
 # We won't try to fetch more unread message IDs from the database than
 # this limit.  The limit is super high, in large part because it means
