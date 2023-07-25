@@ -228,6 +228,7 @@ export function sorted_ids(ids: number[]): number[] {
 export function set_match_data(target: Message, source: MatchedMessage): void {
     target.match_subject = source.match_subject;
     target.match_content = source.match_content;
+    console.log("message content =====", target.match_content)
 }
 
 export function get_match_topic(obj: Message): string | undefined {

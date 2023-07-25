@@ -93,7 +93,7 @@ def get_messages_backend(
     client_gravatar: bool = REQ(json_validator=check_bool, default=True),
     apply_markdown: bool = REQ(json_validator=check_bool, default=True),
 ) -> HttpResponse:
-    print(f"Message fetch called")
+
     anchor = parse_anchor_value(anchor_val, use_first_unread_anchor_val)
     if num_before + num_after > MAX_MESSAGES_PER_FETCH:
         raise JsonableError(
