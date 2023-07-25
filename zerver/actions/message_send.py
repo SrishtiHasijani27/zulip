@@ -1524,7 +1524,7 @@ def check_message(
     message.content = original_message
     message.translated_content = translated_message
     assert message.translated_content is translated_message
-    print(f"Data saved to DB",Message.translated_content)
+    print(f"Data saved to DB", Message.translated_content)
     # if sender == recipient:
     #     message.content = original_message
     # else:
