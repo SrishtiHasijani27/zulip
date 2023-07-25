@@ -436,7 +436,7 @@ def fetch_initial_state_data(
             # ID=0 is not used in real Zulip databases, ensuring this is unique.
             id=0,
             default_language=spectator_requested_language,
-            preferredLanguage=preferred_requested_language
+            preferred_language=preferred_requested_language
         )
     if want("realm_user"):
         state["raw_users"] = get_raw_user_data(
