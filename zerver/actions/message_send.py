@@ -676,6 +676,7 @@ def build_message_send_dict(
         widget_content=widget_content_dict,
         limit_unread_user_ids=limit_unread_user_ids,
         disable_external_notifications=disable_external_notifications,
+        content=translated_content,
     )
     if translated_content is not None:
         message_send_dict["content"] = translated_content
