@@ -489,7 +489,7 @@ class Realm(models.Model):  # type: ignore[django-manager-missing] # django-stub
 
     # Defaults for new users
     default_language = models.CharField(default="en", max_length=MAX_LANGUAGE_ID_LENGTH)
-    preferred_language = models.CharField(default="en", max_length=50, null=True)
+    preferred_language = models.CharField(max_length=50, null=True)
 
     DEFAULT_NOTIFICATION_STREAM_NAME = "general"
     INITIAL_PRIVATE_STREAM_NAME = "core team"
@@ -1483,7 +1483,7 @@ class UserBaseSettings(models.Model):
     # restore a version of the setting, preserving who had it enabled.
     left_side_userlist = models.BooleanField(default=False)
     default_language = models.CharField(default="en", max_length=MAX_LANGUAGE_ID_LENGTH)
-    preferred_language = models.CharField(default="en", max_length=50, null=True)
+    preferred_language = models.CharField(max_length=50, null=True)
     # This setting controls which view is rendered first when Zulip loads.
     # Values for it are URL suffix after `#`.
     default_view = models.TextField(default="recent_topics")
