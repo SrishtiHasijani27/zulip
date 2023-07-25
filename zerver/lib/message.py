@@ -475,6 +475,7 @@ class MessageDict:
                 "edit_history": message.edit_history,
                 "content": message.content,
                 "rendered_content": message.rendered_content,
+
                 "rendered_content_version": message.rendered_content_version,
                 "recipient_id": message.recipient.id,
                 "recipient__type": message.recipient.type,
@@ -527,6 +528,7 @@ class MessageDict:
             topic_name=row[DB_TOPIC_NAME],
             date_sent=row["date_sent"],
             rendered_content=row["rendered_content"],
+
             rendered_content_version=row["rendered_content_version"],
             sender_id=row["sender_id"],
             sender_realm_id=row["sender__realm_id"],
@@ -537,6 +539,7 @@ class MessageDict:
             recipient_type_id=row["recipient__type_id"],
             reactions=row["reactions"],
             submessages=row["submessages"],
+
         )
 
     @staticmethod
@@ -558,7 +561,7 @@ class MessageDict:
         recipient_type_id: int,
         reactions: List[RawReactionRow],
         submessages: List[Dict[str, Any]],
-        translated_content: str,
+
 
     ) -> Dict[str, Any]:
         obj = dict(

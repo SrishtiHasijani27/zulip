@@ -1243,7 +1243,7 @@ def check_send_message(
     skip_stream_access_check: bool = False,
 ) -> int:
     addressee = Addressee.legacy_build(sender, recipient_type_name, message_to, topic_name)
-    
+
     try:
         message = check_message(
             sender,
