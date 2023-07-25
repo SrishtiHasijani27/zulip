@@ -281,7 +281,8 @@ class RealmAuthenticationMethod(models.Model):
         unique_together = ("realm", "name")
 
 
-class Realm(models.Model):  # type: ignore[django-manager-missing] # django-stubs cannot resolve the custom CTEManager yet https://github.com/typeddjango/django-stubs/issues/1023
+class Realm(
+    models.Model):  # type: ignore[django-manager-missing] # django-stubs cannot resolve the custom CTEManager yet https://github.com/typeddjango/django-stubs/issues/1023
     MAX_REALM_NAME_LENGTH = 40
     MAX_REALM_DESCRIPTION_LENGTH = 1000
     MAX_REALM_SUBDOMAIN_LENGTH = 40
@@ -489,7 +490,7 @@ class Realm(models.Model):  # type: ignore[django-manager-missing] # django-stub
 
     # Defaults for new users
     default_language = models.CharField(default="en", max_length=MAX_LANGUAGE_ID_LENGTH)
-    preferred_language = models.CharField(default="en",max_length=50, null=True)
+    preferred_language = models.CharField(default="en", max_length=50, null=True)
 
     DEFAULT_NOTIFICATION_STREAM_NAME = "general"
     INITIAL_PRIVATE_STREAM_NAME = "core team"
@@ -1483,7 +1484,7 @@ class UserBaseSettings(models.Model):
     # restore a version of the setting, preserving who had it enabled.
     left_side_userlist = models.BooleanField(default=False)
     default_language = models.CharField(default="en", max_length=MAX_LANGUAGE_ID_LENGTH)
-    preferred_language = models.CharField(default="en",max_length=50, null=True)
+    preferred_language = models.CharField(default="en", max_length=50, null=True)
     # This setting controls which view is rendered first when Zulip loads.
     # Values for it are URL suffix after `#`.
     default_view = models.TextField(default="recent_topics")
@@ -1738,7 +1739,8 @@ class RealmUserDefault(UserBaseSettings):
     realm = models.OneToOneField(Realm, on_delete=CASCADE)
 
 
-class UserProfile(AbstractBaseUser, PermissionsMixin, UserBaseSettings):  # type: ignore[django-manager-missing] # django-stubs cannot resolve the custom CTEManager yet https://github.com/typeddjango/django-stubs/issues/1023
+class UserProfile(AbstractBaseUser, PermissionsMixin,
+                  UserBaseSettings):  # type: ignore[django-manager-missing] # django-stubs cannot resolve the custom CTEManager yet https://github.com/typeddjango/django-stubs/issues/1023
     USERNAME_FIELD = "email"
     MAX_NAME_LENGTH = 100
     MIN_NAME_LENGTH = 2
@@ -2213,7 +2215,8 @@ class PasswordTooWeakError(Exception):
     pass
 
 
-class UserGroup(models.Model):  # type: ignore[django-manager-missing] # django-stubs cannot resolve the custom CTEManager yet https://github.com/typeddjango/django-stubs/issues/1023
+class UserGroup(
+    models.Model):  # type: ignore[django-manager-missing] # django-stubs cannot resolve the custom CTEManager yet https://github.com/typeddjango/django-stubs/issues/1023
     MAX_NAME_LENGTH = 100
     INVALID_NAME_PREFIXES = ["@", "role:", "user:", "stream:", "channel:"]
 
@@ -2809,7 +2812,7 @@ def clear_client_cache() -> None:  # nocoverage
 def get_client(name: str) -> Client:
     # Accessing KEY_PREFIX through the module is necessary
     # because we need the updated value of the variable.
-    cache_name = cache.KEY_PREFIX + name[0 : Client.MAX_NAME_LENGTH]
+    cache_name = cache.KEY_PREFIX + name[0: Client.MAX_NAME_LENGTH]
     if cache_name not in get_client_cache:
         result = get_client_remote_cache(name)
         get_client_cache[cache_name] = result
@@ -2822,7 +2825,7 @@ def get_client_cache_key(name: str) -> str:
 
 @cache_with_key(get_client_cache_key, timeout=3600 * 24 * 7)
 def get_client_remote_cache(name: str) -> Client:
-    (client, _) = Client.objects.get_or_create(name=name[0 : Client.MAX_NAME_LENGTH])
+    (client, _) = Client.objects.get_or_create(name=name[0: Client.MAX_NAME_LENGTH])
     return client
 
 
@@ -2947,6 +2950,7 @@ class AbstractMessage(models.Model):
 
     content = models.TextField()
     rendered_content = models.TextField(null=True)
+    translated_content = models.TextField(null=True)
     rendered_content_version = models.IntegerField(null=True)
 
     date_sent = models.DateTimeField("date sent", db_index=True)
@@ -3040,6 +3044,9 @@ class Message(AbstractMessage):
 
     def save_rendered_content(self) -> None:
         self.save(update_fields=["rendered_content", "rendered_content_version"])
+
+    def save_translated_content(self) -> None:
+        self.save(update_fields=["translated_content"])
 
     @staticmethod
     def need_to_render_content(
@@ -3427,7 +3434,7 @@ class UserMessage(AbstractUserMessage):
                 "user_profile",
                 "message",
                 condition=Q(flags__andnz=AbstractUserMessage.flags.mentioned.mask)
-                | Q(flags__andnz=AbstractUserMessage.flags.wildcard_mentioned.mask),
+                          | Q(flags__andnz=AbstractUserMessage.flags.wildcard_mentioned.mask),
                 name="zerver_usermessage_wildcard_mentioned_message_id",
             ),
             models.Index(
@@ -4349,6 +4356,7 @@ class ScheduledMessage(models.Model):
     subject = models.CharField(max_length=MAX_TOPIC_NAME_LENGTH)
     content = models.TextField()
     rendered_content = models.TextField()
+    translated_content = models.TextField(null=True)
     sending_client = models.ForeignKey(Client, on_delete=CASCADE)
     stream = models.ForeignKey(Stream, null=True, on_delete=CASCADE)
     realm = models.ForeignKey(Realm, on_delete=CASCADE)
@@ -4949,7 +4957,7 @@ def get_fake_email_domain(realm: Realm) -> str:
     except ValidationError:
         raise InvalidFakeEmailDomainError(
             settings.FAKE_EMAIL_DOMAIN + " is not a valid domain. "
-            "Consider setting the FAKE_EMAIL_DOMAIN setting."
+                                         "Consider setting the FAKE_EMAIL_DOMAIN setting."
         )
 
     return settings.FAKE_EMAIL_DOMAIN

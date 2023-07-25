@@ -199,7 +199,8 @@ class SendMessageRequest:
     limit_unread_user_ids: Optional[Set[int]] = None
     service_queue_events: Optional[Dict[str, List[Dict[str, Any]]]] = None
     disable_external_notifications: bool = False
-    translated_content: Optional[str] = None
+
+
 
 # We won't try to fetch more unread message IDs from the database than
 # this limit.  The limit is super high, in large part because it means
@@ -557,11 +558,13 @@ class MessageDict:
         recipient_type_id: int,
         reactions: List[RawReactionRow],
         submessages: List[Dict[str, Any]],
+        translated_content: str,
+
     ) -> Dict[str, Any]:
         obj = dict(
             id=message_id,
             sender_id=sender_id,
-            content=content,
+            content=translated_content,
             recipient_type_id=recipient_type_id,
             recipient_type=recipient_type,
             recipient_id=recipient_id,
@@ -1323,8 +1326,8 @@ def apply_unread_message_event(
             stream_id not in state["muted_stream_ids"]
             # This next check hits the database.
             and not topic_has_visibility_policy(
-                user_profile, stream_id, topic, UserTopic.VisibilityPolicy.MUTED
-            )
+            user_profile, stream_id, topic, UserTopic.VisibilityPolicy.MUTED
+        )
         ):
             state["unmuted_stream_msgs"].add(message_id)
 
@@ -1612,8 +1615,8 @@ def get_recent_private_conversations(user_profile: UserProfile) -> Dict[int, Dic
     # Now we need to map all the recipient_id objects to lists of user IDs
     for recipient_id, user_profile_id in (
         Subscription.objects.filter(recipient_id__in=recipient_map.keys())
-        .exclude(user_profile_id=user_profile.id)
-        .values_list("recipient_id", "user_profile_id")
+            .exclude(user_profile_id=user_profile.id)
+            .values_list("recipient_id", "user_profile_id")
     ):
         recipient_map[recipient_id]["user_ids"].append(user_profile_id)
 

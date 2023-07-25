@@ -305,8 +305,8 @@ def get_recipient_info(
                 if user_id_to_visibility_policy.get(
                     row["user_profile_id"], UserTopic.VisibilityPolicy.INHERIT
                 )
-                == UserTopic.VisibilityPolicy.FOLLOWED
-                and row["followed_topic_" + setting]
+                   == UserTopic.VisibilityPolicy.FOLLOWED
+                   and row["followed_topic_" + setting]
             }
 
         followed_topic_email_user_ids = followed_topic_notification_recipients(
@@ -549,7 +549,7 @@ def build_message_send_dict(
     mention_backend: Optional[MentionBackend] = None,
     limit_unread_user_ids: Optional[Set[int]] = None,
     disable_external_notifications: bool = False,
-    translated_content: Optional[str] = None
+
 ) -> SendMessageRequest:
     """Returns a dictionary that can be passed into do_send_messages.  In
     production, this is always called by check_message, but some
@@ -597,7 +597,7 @@ def build_message_send_dict(
         email_gateway=email_gateway,
     )
     message.rendered_content = rendering_result.rendered_content
-    print(f"message.rendered_content" ,message.rendered_content)
+    print(f"message.rendered_content", message.rendered_content)
     message.rendered_content_version = markdown_version
     links_for_embed = rendering_result.links_for_preview
 
@@ -676,10 +676,8 @@ def build_message_send_dict(
         widget_content=widget_content_dict,
         limit_unread_user_ids=limit_unread_user_ids,
         disable_external_notifications=disable_external_notifications,
-        content=translated_content,
+
     )
-    if translated_content is not None:
-        message_send_dict["content"] = translated_content
 
     return message_send_dict
 
@@ -1245,11 +1243,13 @@ def check_send_message(
     skip_stream_access_check: bool = False,
 ) -> int:
     addressee = Addressee.legacy_build(sender, recipient_type_name, message_to, topic_name)
+    
     try:
         message = check_message(
             sender,
             client,
             addressee,
+
             message_content,
             realm,
             forged,
@@ -1513,8 +1513,9 @@ def check_message(
 
     translated_message = translate_messages(original_message, message.recipient.type_id)
     print(f"translate_message", translated_message)
-    message.content = original_message
 
+    message.content = original_message
+    message.translated_content = translated_message
 
     message.realm = realm
     if addressee.is_stream():
@@ -1561,7 +1562,6 @@ def check_message(
         mention_backend=mention_backend,
         limit_unread_user_ids=limit_unread_user_ids,
         disable_external_notifications=disable_external_notifications,
-        translated_content=translated_message,
 
     )
 
@@ -1789,7 +1789,7 @@ def translate_messages(message_content, recipient_id):
 
     preferred_language = recipient_profile.preferred_language
     print(f"Recepient_id is ", recipient_profile.recipient)
-    print(f"recipient_profile.preferred_language",preferred_language)
+    print(f"recipient_profile.preferred_language", preferred_language)
 
     translated_content = translate_message(message_content, preferred_language)
 
