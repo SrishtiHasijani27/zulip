@@ -392,6 +392,7 @@ export function update_page(property) {
     // The default_language button text updates to the language
     // name and not the value of the user_settings property.
     if (property === "default_language") {
+        console.log("propert name in setting display",property)
         $container.find(".default_language_name").text(user_default_language_name);
         return;
     }
