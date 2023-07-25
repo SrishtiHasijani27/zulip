@@ -567,7 +567,6 @@ class MessageDict:
         obj = dict(
             id=message_id,
             sender_id=sender_id,
-            content=translated_content,
             recipient_type_id=recipient_type_id,
             recipient_type=recipient_type,
             recipient_id=recipient_id,
