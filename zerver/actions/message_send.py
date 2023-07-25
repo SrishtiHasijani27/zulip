@@ -591,7 +591,7 @@ def build_message_send_dict(
 
     rendering_result = render_incoming_message(
         message,
-        message.content,
+        message.translated_content,
         realm,
         mention_data=mention_data,
         email_gateway=email_gateway,
@@ -1521,13 +1521,14 @@ def check_message(
     translated_message = translate_messages(original_message, message.recipient.type_id)
     print(f"translate_message", translated_message)
 
-    # message.content = original_message
-    # message.translated_content = translated_message
-
-    if sender == recipient:
-        message.content = original_message
-    else:
-        message.content = translated_message
+    message.content = original_message
+    message.translated_content = translated_message
+    assert message.translated_content is translated_message
+    print(f"Data saved to DB",Message.translated_content)
+    # if sender == recipient:
+    #     message.content = original_message
+    # else:
+    #     message.content = translated_message
 
     message.realm = realm
     if addressee.is_stream():
