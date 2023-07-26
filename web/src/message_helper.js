@@ -19,6 +19,7 @@ export function process_new_message(message) {
         // the new message
         if (util.get_match_topic(message) !== undefined) {
             util.set_match_data(cached_msg, message);
+            console.log("util.set_match_data(cached_msg, message);",message)
         }
         return cached_msg;
     }
