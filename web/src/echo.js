@@ -460,8 +460,7 @@ export function process_from_server(messages) {
 
 
            if (!message.locally_echoed && !(isSender)) {
-            const $row = $(`div[zid="${message.id}"]`);
-            $row.find(".message_content").html(message.content)
+                message_content.innerHTML =message.content
         }
 
        }
