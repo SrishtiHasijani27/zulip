@@ -72,6 +72,8 @@ def get_search_fields(
     content_matches: Iterable[Tuple[int, int]],
     topic_matches: Iterable[Tuple[int, int]],
 ) -> Dict[str, str]:
+    print(f"highlight_string(rendered_content, rendered_content),",rendered_content)
+    print(f"highlight_string(content_matches, content_matches),", content_matches)
     return {
         "match_content": highlight_string(rendered_content, content_matches),
         MATCH_TOPIC: highlight_string(escape_html(topic_name), topic_matches),
