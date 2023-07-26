@@ -148,6 +148,7 @@ def render_incoming_message(
     email_gateway: bool = False,
 ) -> MessageRenderingResult:
     realm_alert_words_automaton = get_alert_word_automaton(realm)
+
     try:
         rendering_result = render_markdown(
             message=message,
@@ -706,6 +707,7 @@ def create_user_messages(
     all_topic_wildcard_mention_user_ids = topic_wildcard_mention_user_ids.union(
         topic_wildcard_mention_in_followed_topic_user_ids
     )
+
 
     base_flags = 0
     if rendering_result.mentions_stream_wildcard:
@@ -1525,16 +1527,20 @@ def check_message(
 
     translated_message = translate_messages(original_message, message.recipient.type_id)
     print(f"translate_message", translated_message)
-    message.content = str(original_message)
-    message.translated_content = str(translated_message)
+    message.content = original_message
+    message.translated_content=translated_message
     assert message.translated_content is translated_message
-    print(f"Data saved to DB", Message.translated_content)
-    if sender == recipient:
-        # Use original_message for sender
-        message.content = original_message
-    else:
-        # Use translated_message for recipient
-        message.content = str(translated_message)
+
+    # message.content = str(original_message)
+    # message.translated_content = str(translated_message)
+    # assert message.translated_content is translated_message
+    # print(f"Data saved to DB", Message.translated_content)
+    # if sender == recipient:
+    #     # Use original_message for sender
+    #     message.content = original_message
+    # else:
+    #     # Use translated_message for recipient
+    #     message.content = str(translated_message)
 
     message.realm = realm
     if addressee.is_stream():

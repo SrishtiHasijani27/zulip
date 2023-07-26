@@ -180,6 +180,8 @@ export function insert_local_message(message_request, local_id_float, insert_new
     const message = {...message_request};
 
     message.raw_content = message.content;
+    console.log("Message is  ",message.raw_content)
+    console.log("User details is...:",message.local_id)
 
     // NOTE: This will parse synchronously. We're not using the async pipeline
     markdown.apply_markdown(message);
