@@ -23,6 +23,7 @@ import * as stream_list from "./stream_list";
 import * as stream_topic_history from "./stream_topic_history";
 import * as transmit from "./transmit";
 import * as util from "./util";
+import {message_content} from "./compose_state";
 
 // Docs: https://zulip.readthedocs.io/en/latest/subsystems/sending-messages.html
 
@@ -178,7 +179,8 @@ export function insert_local_message(message_request, local_id_float, insert_new
     // for zulip.js:add_message
     // Keep this in sync with changes to compose.create_message_object
     const message = {...message_request};
-
+    message.translation_status = "original";
+    message.original_content = message.content;
     message.raw_content = message.content;
     console.log("Message is  ",message.raw_content)
     console.log("User details is...:",message.local_id)
@@ -389,6 +391,11 @@ export function process_from_server(messages) {
 
         const local_id = message.local_id;
         const client_message = waiting_for_ack.get(local_id);
+        if (!isCurrentUserSender(message)) {
+      // Update translation status for the receiver
+            message.translation_status = "translated";
+    }
+
         if (client_message === undefined) {
             // For messages that weren't locally echoed, we go through
             // the "main" codepath that doesn't have to id reconciliation.
@@ -403,14 +410,15 @@ export function process_from_server(messages) {
         if (message_store.get(message.id).failed_request) {
             failed_message_success(message.id);
         }
-
+        console.log(message.sender_email !== currentUserEmail)
+        if(message.sender_email !== currentUserEmail){
         if (client_message.content !== message.content) {
             client_message.content = message.content;
             console.log("Client message.....",client_message.content)
             console.log("message.content..............",message.content)
             console.log("Raw message......",message.raw_content)
             sent_messages.mark_disparity(local_id);
-        }
+        }}
         sent_messages.report_event_received(local_id);
 
         message_store.update_booleans(client_message, message.flags);
@@ -446,6 +454,7 @@ export function process_from_server(messages) {
         }
     }
 
+
     return non_echo_messages;
 }
 
@@ -478,6 +487,14 @@ export function display_slow_send_loading_spinner(message) {
         // successfully sent.
     }
 }
+
+
+function isCurrentUserSender(message) {
+  const currentUserEmail = people.my_current_email();
+  return message.sender_email === currentUserEmail;
+}
+
+
 
 export function initialize({on_send_message_success}) {
     function on_failed_action(selector, callback) {
