@@ -408,6 +408,7 @@ export function process_from_server(messages) {
             client_message.content = message.content;
             console.log("Client message.....",client_message.content)
             console.log("message.content..............",message.content)
+            console.log("Raw message......",message.raw_content)
             sent_messages.mark_disparity(local_id);
         }
         sent_messages.report_event_received(local_id);
