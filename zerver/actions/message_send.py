@@ -860,13 +860,15 @@ def do_send_messages(
                 send_request.message.save(update_fields=["has_attachment"])
         for send_request in send_message_requests:
 
-            if send_request.message.recipient.type == Recipient.PERSONAL:
-                if send_request.message.sender_id != send_request.message.recipient_id:
-                    # For messages sent to others, show the translated content to the receiver
-                    send_request.message.content = send_request.message.translated_content
-                    send_request.message.rendered_content = None  # Clear the rendered content to force
-                    # re-rendering
-                # Otherwise, do nothing for the sender; they will see the original content
+                if send_request.message.recipient.type == Recipient.PERSONAL:
+                    if send_request.message.sender_id != send_request.message.recipient_id:
+                        # For messages sent to others, show the translated content to the receiver
+                        send_request.message.content = send_request.message.translated_content
+                        send_request.message.rendered_content = None  # Clear the rendered content to force
+                        # re-rendering
+                    # Otherwise, do nothing for the sender; they will see the original content
+
+
 
         ums: List[UserMessageLite] = []
 
@@ -1522,19 +1524,17 @@ def check_message(
     print(f"recepient name is ", recipient)
 
     translated_message = translate_messages(original_message, message.recipient.type_id)
-    #assert message.translated_content is translated_message
     print(f"translate_message", translated_message)
-    if recipient.id == sender.id:
+    message.content = str(original_message)
+    message.translated_content = str(translated_message)
+    assert message.translated_content is translated_message
+    print(f"Data saved to DB", Message.translated_content)
+    if sender == recipient:
+        # Use original_message for sender
         message.content = original_message
     else:
-        message.content = translated_message
-
-
-    print(f"Data saved to DB", Message.translated_content)
-    # if sender == recipient:
-    #     message.content = original_message
-    # else:
-    #     message.content = translated_message
+        # Use translated_message for recipient
+        message.content = str(translated_message)
 
     message.realm = realm
     if addressee.is_stream():
