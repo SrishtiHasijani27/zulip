@@ -859,16 +859,17 @@ def do_send_messages(
                 send_request.message.has_attachment = True
                 send_request.message.save(update_fields=["has_attachment"])
         for send_request in send_message_requests:
-            if (
-                send_request.message.recipient.type == Recipient.PERSONAL and
-                send_request.active_user_ids != {send_request.message.sender_id}
-            ):
-                send_request.message.content = send_request.message.translated_content
-                send_request.message.save(update_fields=["content"])
-                print(
-                    "send_request.message.content = Message.translated_content",
-                    send_request.message.content,
-                )
+            if send_request.message.recipient.type == Recipient.PERSONAL:
+                if send_request.message.sender_id == send_request.message.recipient_id:
+                    # If sender and receiver are the same (self-message), show the original content to the
+                    # sender
+
+                    send_request.message.content = send_request.message.content
+                else:
+                    # For messages sent to others, show the translated content to the receiver
+                    send_request.message.content = send_request.message.translated_content
+                #send_request.message.save(update_fields=["content"])
+
         ums: List[UserMessageLite] = []
 
         for send_request in send_message_requests:
