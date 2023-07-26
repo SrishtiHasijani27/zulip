@@ -859,16 +859,16 @@ def do_send_messages(
                 send_request.message.has_attachment = True
                 send_request.message.save(update_fields=["has_attachment"])
         for send_request in send_message_requests:
-            if send_request.message.recipient.type == Recipient.PERSONAL:
-                if send_request.message.sender_id == send_request.message.recipient_id:
-                    # If sender and receiver are the same (self-message), show the original content to the
-                    # sender
 
-                    send_request.message.content = send_request.message.content
-                else:
-                    # For messages sent to others, show the translated content to the receiver
-                    send_request.message.content = send_request.message.translated_content
-                #send_request.message.save(update_fields=["content"])
+                if send_request.message.recipient.type == Recipient.PERSONAL:
+                    if send_request.message.sender_id != send_request.message.recipient_id:
+                        # For messages sent to others, show the translated content to the receiver
+                        send_request.message.content = send_request.message.translated_content
+                        send_request.message.rendered_content = None  # Clear the rendered content to force
+                        # re-rendering
+                    # Otherwise, do nothing for the sender; they will see the original content
+
+
 
         ums: List[UserMessageLite] = []
 
