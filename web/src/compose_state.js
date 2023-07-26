@@ -118,6 +118,7 @@ export const topic = get_or_set("stream_message_recipient_topic");
 // We can't trim leading whitespace in `compose_textarea` because
 // of the indented syntax for multi-line code blocks.
 export const message_content = get_or_set("compose-textarea", true);
+console.log("message_content=========",message_content)
 
 const untrimmed_message_content = get_or_set("compose-textarea", true, true);
 
