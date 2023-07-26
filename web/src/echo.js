@@ -391,10 +391,7 @@ export function process_from_server(messages) {
 
         const local_id = message.local_id;
         const client_message = waiting_for_ack.get(local_id);
-        if (!isCurrentUserSender(message)) {
-      // Update translation status for the receiver
-            message.translation_status = "translated";
-    }
+
 
         if (client_message === undefined) {
             // For messages that weren't locally echoed, we go through
@@ -410,7 +407,7 @@ export function process_from_server(messages) {
         if (message_store.get(message.id).failed_request) {
             failed_message_success(message.id);
         }
-        console.log(message.sender_email !== currentUserEmail)
+
 
         if (client_message.content !== message.content) {
             client_message.content = message.content;
@@ -450,7 +447,7 @@ export function process_from_server(messages) {
     if (msgs_to_rerender.length > 0) {
         // In theory, we could just rerender messages where there were
         // changes in either the rounded timestamp we display or the
-        // message content, but in practice, there's no harm to just
+         // message content, but in practice, there's no harm to just
         // doing it unconditionally.
         for (const msg_list of message_lists.all_rendered_message_lists()) {
             msg_list.view.rerender_messages(msgs_to_rerender);
@@ -459,12 +456,12 @@ export function process_from_server(messages) {
        for (const message of non_echo_messages) {
            const local_id = message.local_id;
            const client_message = waiting_for_ack.get(local_id);
+           const isSender = people.is_current_user(message.sender_email);
 
-           if (!message.locally_echoed && !(isCurrentUserSender(message))) {
-            // Only show the translated message to the receiver (not the sender)
-            // Apply your logic here to update the message content for the receiver
-            // For example:
-            client_message.content = message.content
+
+           if (!message.locally_echoed && !(isSender)) {
+            const $row = $(`div[zid="${message.id}"]`);
+            $row.find(".message_content").html(message.content)
         }
 
        }
@@ -504,10 +501,7 @@ export function display_slow_send_loading_spinner(message) {
 }
 
 
-function isCurrentUserSender(message) {
-  const currentUserEmail = people.my_current_email();
-  return message.sender_email === currentUserEmail;
-}
+
 
 
 
