@@ -1522,7 +1522,7 @@ def check_message(
     print(f"recepient name is ", recipient)
 
     translated_message = translate_messages(original_message, message.recipient.type_id)
-    assert message.translated_content is translated_message
+    #assert message.translated_content is translated_message
     print(f"translate_message", translated_message)
     if recipient.id == sender.id:
         message.content = original_message
