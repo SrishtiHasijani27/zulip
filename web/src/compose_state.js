@@ -60,14 +60,14 @@ function get_or_set(fieldname, keep_leading_whitespace, no_trim) {
         const oldval = $elem.val();
         if (newval !== undefined) {
             $elem.val(newval);
-            console.log("newval.trimEnd()newval.trimEnd()", newval)
+
         }
         if (no_trim) {
             return oldval;
         } else if (keep_leading_whitespace) {
             return oldval.trimEnd();
         }
-        console.log("oldval.trimEnd()oldval.trimEnd()", oldval)
+
         return oldval.trim();
     };
 }
