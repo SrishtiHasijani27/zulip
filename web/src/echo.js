@@ -407,14 +407,15 @@ export function process_from_server(messages) {
         if (message_store.get(message.id).failed_request) {
             failed_message_success(message.id);
         }
-
-
-        if (client_message.content !== message.content) {
-            client_message.content = message.content;
-            console.log("Client message.....",client_message.content)
-            console.log("message.content..............",message.content)
-            console.log("Raw message......",message.raw_content)
-            sent_messages.mark_disparity(local_id);
+        const isSender = people.is_current_user(message.sender_email);
+        if(!isSender) {
+            if (client_message.content !== message.content) {
+                client_message.content = message.content;
+                console.log("Client message.....", client_message.content)
+                console.log("message.content..............", message.content)
+                console.log("Raw message......", message.raw_content)
+                sent_messages.mark_disparity(local_id);
+            }
         }
 
         sent_messages.report_event_received(local_id);
@@ -453,17 +454,17 @@ export function process_from_server(messages) {
             msg_list.view.rerender_messages(msgs_to_rerender);
         }
     }
-       for (const message of non_echo_messages) {
-           const local_id = message.local_id;
-           const client_message = waiting_for_ack.get(local_id);
-           const isSender = people.is_current_user(message.sender_email);
-
-
-           if (!message.locally_echoed && !(isSender)) {
-                message_content.innerHTML =message.content
-        }
-
-       }
+       // for (const message of non_echo_messages) {
+       //     const local_id = message.local_id;
+       //     const client_message = waiting_for_ack.get(local_id);
+       //     const isSender = people.is_current_user(message.sender_email);
+       //
+       //
+       //     if (!message.locally_echoed && !(isSender)) {
+       //          message_content.innerHTML =message.content
+       //  }
+       //
+       // }
 
 
     return non_echo_messages;
