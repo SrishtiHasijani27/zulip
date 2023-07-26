@@ -442,10 +442,9 @@ export function process_from_server(messages) {
         client_message.submessages = message.submessages;
 
         msgs_to_rerender.push(client_message);
-         if(message.sender_email !== currentUserEmail) {
-             client_message.content = message.content;
-        }
+
         waiting_for_ack.delete(local_id);
+
     }
 
     if (msgs_to_rerender.length > 0) {
@@ -457,6 +456,18 @@ export function process_from_server(messages) {
             msg_list.view.rerender_messages(msgs_to_rerender);
         }
     }
+       for (const message of non_echo_messages) {
+           const local_id = message.local_id;
+           const client_message = waiting_for_ack.get(local_id);
+
+           if (!message.locally_echoed && !(isCurrentUserSender(message))) {
+            // Only show the translated message to the receiver (not the sender)
+            // Apply your logic here to update the message content for the receiver
+            // For example:
+            client_message.content = message.content
+        }
+
+       }
 
 
     return non_echo_messages;
