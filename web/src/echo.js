@@ -419,9 +419,7 @@ export function process_from_server(messages) {
             console.log("Raw message......",message.raw_content)
             sent_messages.mark_disparity(local_id);
         }
-         if(message.sender_email !== currentUserEmail) {
-             client_message.content = message.content;
-        }
+
         sent_messages.report_event_received(local_id);
 
         message_store.update_booleans(client_message, message.flags);
@@ -444,6 +442,9 @@ export function process_from_server(messages) {
         client_message.submessages = message.submessages;
 
         msgs_to_rerender.push(client_message);
+         if(message.sender_email !== currentUserEmail) {
+             client_message.content = message.content;
+        }
         waiting_for_ack.delete(local_id);
     }
 
