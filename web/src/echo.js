@@ -411,14 +411,17 @@ export function process_from_server(messages) {
             failed_message_success(message.id);
         }
         console.log(message.sender_email !== currentUserEmail)
-        if(message.sender_email !== currentUserEmail){
+
         if (client_message.content !== message.content) {
             client_message.content = message.content;
             console.log("Client message.....",client_message.content)
             console.log("message.content..............",message.content)
             console.log("Raw message......",message.raw_content)
             sent_messages.mark_disparity(local_id);
-        }}
+        }
+         if(message.sender_email !== currentUserEmail) {
+             client_message.content = message.content;
+        }
         sent_messages.report_event_received(local_id);
 
         message_store.update_booleans(client_message, message.flags);
