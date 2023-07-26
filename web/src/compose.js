@@ -310,7 +310,7 @@ export function finish(scheduling_message = false) {
     compose_banner.clear_message_sent_banners();
 
     const message_content = compose_state.message_content();
-   
+
     console.log("Testing purpose ", message_content)
 
     // Skip normal validation for zcommands, since they aren't
