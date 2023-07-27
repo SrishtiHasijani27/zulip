@@ -731,12 +731,14 @@ export class MessageListView {
     }
 
     _get_message_template(message_container) {
+        console.log(" _get_message_template(message_container)",message_container.msg)
         const msg_reactions = reactions.get_message_reactions(message_container.msg);
         message_container.msg.message_reactions = msg_reactions;
         const msg_to_render = {
             ...message_container,
             table_name: this.table_name,
         };
+        console.log("render_single_message(msg_to_render);",msg_to_render);
         return render_single_message(msg_to_render);
     }
 
