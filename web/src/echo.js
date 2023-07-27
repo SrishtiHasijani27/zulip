@@ -480,7 +480,7 @@ export function process_from_server(messages) {
        //
        // }
 
-
+        console.log("non echo message is ", non_echo_messages)
     return non_echo_messages;
 }
 
