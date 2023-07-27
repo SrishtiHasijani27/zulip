@@ -216,6 +216,7 @@ export function is_slash_command(content) {
 
 export function try_deliver_locally(message_request, insert_new_messages) {
     if (markdown.contains_backend_only_syntax(message_request.content)) {
+        console.log("try_deliver_locally called")
         return undefined;
     }
 
@@ -420,21 +421,21 @@ export function process_from_server(messages) {
         console.log("people.my_current_email()..............value", people.my_current_email())
         console.log("const isSender", !(isSender))
 
-            // if (client_message.content !== message.content) {
-            //        if (isCurrentUser)
-            //        {
-            //             client_message.content = client_message.content
-            //             sent_messages.mark_disparity(local_id);
-            //
-            //        }
-            //        else{
-            //         client_message.content = message.content;
-            //         console.log("Client message.....", client_message.content)
-            //         console.log("message.content..............", message.content)
-            //         console.log("Raw message......", message.raw_content)
-            //         sent_messages.mark_disparity(local_id);
-            //     }
-            // }
+            if (client_message.content !== message.content) {
+                   if (isCurrentUser)
+                   {
+                        client_message.content = client_message.content
+                        sent_messages.mark_disparity(local_id);
+
+                   }
+                   else{
+                    client_message.content = message.content;
+                    console.log("Client message.....", client_message.content)
+                    console.log("message.content..............", message.content)
+                    console.log("Raw message......", message.raw_content)
+                    sent_messages.mark_disparity(local_id);
+                }
+            }
 
 
         sent_messages.report_event_received(local_id);
@@ -459,12 +460,7 @@ export function process_from_server(messages) {
         client_message.submessages = message.submessages;
 
         message.raw_content = waiting_for_ack.get(local_id).raw_content;
-        //client_message.content = message.raw_content;
 
-        if (isCurrentUser) {
-            //    client_message.content = message.raw_content;
-             console.log("message.content = client_message.content",client_message.content);
-        }
 
         msgs_to_rerender.push(client_message);
          waiting_for_ack.delete(local_id);

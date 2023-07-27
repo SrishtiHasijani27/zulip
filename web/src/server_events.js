@@ -127,6 +127,7 @@ function get_events_success(events) {
     if (update_message_events.length !== 0) {
         try {
             message_events.update_messages(update_message_events);
+            console.log("message_events.update_messages(update_message_events);")
         } catch (error) {
             blueslip.error("Failed to update messages", undefined, error);
         }

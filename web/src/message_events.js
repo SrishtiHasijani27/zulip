@@ -139,6 +139,7 @@ export function insert_new_messages(messages, sent_by_this_client) {
         // Update the message list's rendering for the newly arrived messages.
         const render_info = message_util.add_new_messages(messages, list);
 
+
         // The render_info.need_user_to_scroll calculation, which
         // looks at message feed scroll positions to see whether the
         // newly arrived message will be visible, is only valid if

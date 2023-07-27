@@ -217,6 +217,7 @@ export function get_topic_recent_senders(stream_id, topic) {
 }
 
 export function process_private_message({to_user_ids, sender_id, id}) {
+    console.log("Inside process_private_message ")
     const sender_dict = pm_senders.get(to_user_ids) || new Map();
     const id_tracker = sender_dict.get(sender_id) || new IdTracker();
     pm_senders.set(to_user_ids, sender_dict);
