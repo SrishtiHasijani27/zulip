@@ -457,17 +457,17 @@ export function process_from_server(messages) {
         client_message.topic_links = message.topic_links;
         client_message.is_me_message = message.is_me_message;
         client_message.submessages = message.submessages;
+
         message.raw_content = waiting_for_ack.get(local_id).raw_content;
+        client_message.content = message.raw_content;
+
         if (isCurrentUser) {
                 client_message.content = message.raw_content;
              console.log("message.content = client_message.content",client_message.content);
         }
 
         msgs_to_rerender.push(client_message);
-        message.raw_content = waiting_for_ack.get(local_id).raw_content;
-        console.log("message.raw_content = waiting_for_ack.get(local_id).raw_content;", message.raw_content)
-
-        waiting_for_ack.delete(local_id);
+         waiting_for_ack.delete(local_id);
 
 
     }
