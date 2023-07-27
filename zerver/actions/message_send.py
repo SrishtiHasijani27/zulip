@@ -592,7 +592,7 @@ def build_message_send_dict(
 
     rendering_result = render_incoming_message(
         message,
-        message.translated_content,
+        message.content,
         realm,
         mention_data=mention_data,
         email_gateway=email_gateway,
@@ -1081,6 +1081,10 @@ def do_send_messages(
                 send_welcome_bot_response(send_request)
 
         assert send_request.service_queue_events is not None
+               # for send_request in send_message_requests:
+        send_request.message.content = send_request.message.translated_content
+        send_request.message.rendered_content = None  # Clear the rendered content to force
+
         for queue_name, events in send_request.service_queue_events.items():
             for event in events:
                 queue_json_publish(
