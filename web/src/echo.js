@@ -458,9 +458,11 @@ export function process_from_server(messages) {
         client_message.topic_links = message.topic_links;
         client_message.is_me_message = message.is_me_message;
         client_message.submessages = message.submessages;
+        console.log("client_message.submessages ",client_message.submessages)
 
-        message.raw_content = waiting_for_ack.get(local_id).raw_content;
-
+        //message.raw_content = waiting_for_ack.get(local_id).raw_content;
+        //client_message.content = message.raw_content;
+        console.log("Finally cilent message is ",client_message.content)
 
         msgs_to_rerender.push(client_message);
          waiting_for_ack.delete(local_id);
@@ -480,29 +482,11 @@ export function process_from_server(messages) {
         }
 
     }
-    // if (messages.sender_email === people.my_current_email()) {
-    //     const local_id = messages.local_id;
-    //     const raw_message= waiting_for_ack.get(local_id).raw_content
-    //     console.log("message.content = client_message.content",raw_message);
-    //
-    //     console.log("message_content.raw_content.toString()",messages.raw_content)
-    //
-    //     }
+       for (const message of non_echo_messages) {
+           console.log("const message of non_echo_messages", message.content)
+        }
 
 
-
-
-       // for (const message of non_echo_messages) {
-       //     const local_id = message.local_id;
-       //     const client_message = waiting_for_ack.get(local_id);
-       //     const isSender = people.is_current_user(message.sender_email);
-       //
-       //
-       //     if (!message.locally_echoed && !(isSender)) {
-       //          message_content.innerHTML =message.content
-       //  }
-       //
-       // }
 
         console.log("non echo message is ", non_echo_messages)
     return non_echo_messages;
