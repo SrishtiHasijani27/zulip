@@ -399,6 +399,7 @@ export function process_from_server(messages) {
         const client_message = waiting_for_ack.get(local_id);
 
 
+
         if (client_message === undefined) {
             // For messages that weren't locally echoed, we go through
             // the "main" codepath that doesn't have to id reconciliation.
@@ -475,6 +476,8 @@ export function process_from_server(messages) {
         // changes in either the rounded timestamp we display or the
          // message content, but in practice, there's no harm to just
         // doing it unconditionally.
+
+        console.log("Message to render/........",msgs_to_rerender)
         for (const msg_list of message_lists.all_rendered_message_lists()) {
             msg_list.view.rerender_messages(msgs_to_rerender);
 
