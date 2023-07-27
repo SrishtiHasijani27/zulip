@@ -469,14 +469,14 @@ export function process_from_server(messages) {
         }
 
     }
-    if (messages.sender_email === people.my_current_email()) {
-        const local_id = messages.local_id;
-        const raw_message= waiting_for_ack.get(local_id).raw_content
-        console.log("message.content = client_message.content",raw_message);
-        messages.raw_content= raw_message
-        console.log(messages.raw_content)
-
-        }
+    // if (messages.sender_email === people.my_current_email()) {
+    //     const local_id = messages.local_id;
+    //     const raw_message= waiting_for_ack.get(local_id).raw_content
+    //     console.log("message.content = client_message.content",raw_message);
+    //
+    //     console.log("message_content.raw_content.toString()",messages.raw_content)
+    //
+    //     }
 
 
 

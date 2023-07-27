@@ -1223,6 +1223,7 @@ export class MessageListView {
         }
 
         const $first_row = this.get_row(message_containers[0].msg.id);
+        console.log("const $first_row = this.get_row(message_containers[0].msg.id);",$first_row)
 
         // We may not have the row if the stream or topic was muted
         if ($first_row.length === 0) {
@@ -1291,6 +1292,7 @@ export class MessageListView {
     }
 
     rerender_messages(messages, message_content_edited) {
+        console.log("messages in messagelist", messages)
         // We need to destroy all the tippy instances from the DOM before re-rendering to
         // prevent the appearance of tooltips whose reference has been removed.
         message_list_tooltips.destroy_all_message_list_tooltips();
@@ -1316,6 +1318,17 @@ export class MessageListView {
             }
             this._rerender_message(message_container, {message_content_edited, is_revealed: false});
         }
+        for (const messages_in_group of message_groups) {
+              for (const message_container of messages_in_group) {
+                    const client_message = message_container.msg;
+        if (client_message.sender_email === people.my_current_email()) {
+            // Set the content to the original message content
+            client_message.content = client_message.raw_content;
+        }
+    }
+              console.log("message set to original")
+    this._rerender_header(messages_in_group, message_content_edited);
+}
 
         if (current_group.length !== 0) {
             message_groups.push(current_group);
@@ -1328,6 +1341,7 @@ export class MessageListView {
         if (message_lists.current === this.list && narrow_state.is_message_feed_visible()) {
             this.update_sticky_recipient_headers();
         }
+
     }
 
     append(messages, messages_are_new) {
