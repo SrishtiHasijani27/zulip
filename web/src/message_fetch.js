@@ -94,7 +94,7 @@ function process_result(data, opts) {
 }
 
 function get_messages_success(data, opts) {
-    console.log("fetch.js.......get_messages_success(data, opts)",data)
+
     const update_loading_indicator = opts.msg_list === message_lists.current;
     if (opts.num_before > 0) {
         opts.msg_list.data.fetch_status.finish_older_batch({

@@ -81,5 +81,6 @@ export function process_new_message(message) {
         message.reactions = [];
     }
     message_store.update_message_cache(message);
+
     return message;
 }

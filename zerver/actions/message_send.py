@@ -943,6 +943,7 @@ def do_send_messages(
         # send_request.message.rendered_content = None  # Clear the rendered content to force
         # Deliver events to the real-time push system, as well as
         # enqueuing any additional processing triggered by the message.
+        print(f"Send Requested message=====", send_request.message)
 
         wide_message_dict = MessageDict.wide_dict(send_request.message, realm_id)
 
