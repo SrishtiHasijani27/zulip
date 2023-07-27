@@ -234,6 +234,7 @@ def get_messages_backend(
         history_limited=query_info.history_limited,
         anchor=anchor,
     )
+    print(f"json_success(request, data=ret)",ret)
     return json_success(request, data=ret)
 
 

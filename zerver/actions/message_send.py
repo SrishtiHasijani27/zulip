@@ -927,8 +927,8 @@ def do_send_messages(
     # * Implementing the Welcome Bot reply hack
     # * Adding links to the embed_links queue for open graph processing.
     for send_request in send_message_requests:
-        send_request.message.content = send_request.message.translated_content
-        send_request.message.rendered_content=send_request.message.translated_content
+        # send_request.message.content = send_request.message.translated_content
+        send_request.message.rendered_content = send_request.message.translated_content
 
         print(f"Message translated before save", send_request.message.content)
         realm_id: Optional[int] = None
@@ -1541,7 +1541,7 @@ def check_message(
     print(f"translate_message", translated_message)
     message.content = original_message
     message.translated_content = translated_message
-    #assert message.translated_content is translated_message
+    # assert message.translated_content is translated_message
 
     # message.content = str(original_message)
     # message.translated_content = str(translated_message)
