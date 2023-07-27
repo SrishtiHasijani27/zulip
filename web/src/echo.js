@@ -411,7 +411,10 @@ export function process_from_server(messages) {
         if (message_store.get(message.id).failed_request) {
             failed_message_success(message.id);
         }
-        const isSender = people.is_current_user(message.sender_email);
+        let isSender = false;
+        if (message.sender_email === people.my_current_email()) {
+            isSender =true;
+        }
         console.log("const isSender..............value", !(isSender))
         console.log("const isSender", !(isSender))
 
