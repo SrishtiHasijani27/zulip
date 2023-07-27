@@ -2949,6 +2949,7 @@ class AbstractMessage(models.Model):
     subject = models.CharField(max_length=MAX_TOPIC_NAME_LENGTH, db_index=True)
 
     content = models.TextField()
+
     rendered_content = models.TextField(null=True)
     translated_content = models.TextField(null=True)
     rendered_content_version = models.IntegerField(null=True)
