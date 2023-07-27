@@ -448,7 +448,7 @@ export function process_from_server(messages) {
         message.raw_content = waiting_for_ack.get(local_id).raw_content;
         console.log("message.raw_content = waiting_for_ack.get(local_id).raw_content;", message.raw_content)
        if (message.sender_email === people.my_current_email()) {
-            message.content = waiting_for_ack.get(local_id);  }
+             client_message.content = waiting_for_ack.get(local_id);  }
         waiting_for_ack.delete(local_id);
 
 
