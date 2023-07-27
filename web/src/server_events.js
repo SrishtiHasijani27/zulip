@@ -99,6 +99,7 @@ function get_events_success(events) {
         messages = _.sortBy(messages, "id");
         try {
             messages = echo.process_from_server(messages);
+            console.log("messages", messages)
             if (messages.length > 0) {
                 const sent_by_this_client = messages.some((msg) =>
                     sent_messages.messages.has(msg.local_id),

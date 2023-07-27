@@ -465,8 +465,19 @@ export function process_from_server(messages) {
         // doing it unconditionally.
         for (const msg_list of message_lists.all_rendered_message_lists()) {
             msg_list.view.rerender_messages(msgs_to_rerender);
+
         }
+
     }
+    if (messages.sender_email === people.my_current_email()) {
+        const local_id = messages.local_id;
+        const raw_message= waiting_for_ack.get(local_id).raw_content
+        console.log("message.content = client_message.content",raw_message);
+
+        }
+
+
+
 
        // for (const message of non_echo_messages) {
        //     const local_id = message.local_id;
