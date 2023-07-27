@@ -1318,17 +1318,7 @@ export class MessageListView {
             }
             this._rerender_message(message_container, {message_content_edited, is_revealed: false});
         }
-        for (const messages_in_group of message_groups) {
-              for (const message_container of messages_in_group) {
-                    const client_message = message_container.msg;
-        if (client_message.sender_email === people.my_current_email()) {
-            // Set the content to the original message content
-            client_message.content = client_message.raw_content;
-        }
-    }
-              console.log("message set to original")
-    this._rerender_header(messages_in_group, message_content_edited);
-}
+
 
         if (current_group.length !== 0) {
             message_groups.push(current_group);
@@ -1340,6 +1330,7 @@ export class MessageListView {
 
         if (message_lists.current === this.list && narrow_state.is_message_feed_visible()) {
             this.update_sticky_recipient_headers();
+            console.log(("message_lists.current"))
         }
 
     }

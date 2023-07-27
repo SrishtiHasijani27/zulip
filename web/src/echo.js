@@ -413,7 +413,7 @@ export function process_from_server(messages) {
         }
         const isSender = people.is_current_user(message.sender_email);
 
-            if (client_message.content !== message.content) {
+            if (client_message.content !== message.content && message.sender_email !== people.my_current_email()) {
                 client_message.content = message.content;
                 console.log("Client message.....", client_message.content)
                 console.log("message.content..............", message.content)
