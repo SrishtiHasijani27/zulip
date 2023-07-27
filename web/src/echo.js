@@ -450,7 +450,7 @@ export function process_from_server(messages) {
          if (message.sender_email === people.my_current_email()) {
                 client_message.content = message.raw_content;
              console.log("message.content = client_message.content",client_message.content)
-             sent_messages.mark_disparity(local_id);
+             
 
 
        }
