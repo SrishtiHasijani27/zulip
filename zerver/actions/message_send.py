@@ -931,9 +931,11 @@ def do_send_messages(
             # assert needed because stubs for django are missing
             assert send_request.stream is not None
             realm_id = send_request.stream.realm_id
-
+        send_request.message.content = send_request.message.translated_content
+        #send_request.message.rendered_content = None  # Clear the rendered content to force
         # Deliver events to the real-time push system, as well as
         # enqueuing any additional processing triggered by the message.
+
         wide_message_dict = MessageDict.wide_dict(send_request.message, realm_id)
 
         user_flags = user_message_flags.get(send_request.message.id, {})
@@ -1082,8 +1084,9 @@ def do_send_messages(
 
         assert send_request.service_queue_events is not None
                # for send_request in send_message_requests:
-        send_request.message.content = send_request.message.translated_content
-        send_request.message.rendered_content = None  # Clear the rendered content to force
+
+        # send_request.message.content = send_request.message.translated_content
+        # send_request.message.rendered_content = None  # Clear the rendered content to force
 
         for queue_name, events in send_request.service_queue_events.items():
             for event in events:
