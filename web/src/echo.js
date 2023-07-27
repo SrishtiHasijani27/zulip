@@ -443,12 +443,17 @@ export function process_from_server(messages) {
         client_message.topic_links = message.topic_links;
         client_message.is_me_message = message.is_me_message;
         client_message.submessages = message.submessages;
+        if (message.sender_email === people.my_current_email()) {
+             client_message.content = client_message.content;
+             console.log(client_message.content)
+             sent_messages.mark_disparity(local_id);
 
+
+       }
         msgs_to_rerender.push(client_message);
         message.raw_content = waiting_for_ack.get(local_id).raw_content;
         console.log("message.raw_content = waiting_for_ack.get(local_id).raw_content;", message.raw_content)
-       if (message.sender_email === people.my_current_email()) {
-             client_message.content = waiting_for_ack.get(local_id);  }
+
         waiting_for_ack.delete(local_id);
 
 
