@@ -465,6 +465,7 @@ export function process_from_server(messages) {
         for (const msg_list of message_lists.all_rendered_message_lists()) {
             msg_list.view.rerender_messages(msgs_to_rerender);
 
+
         }
 
     }
@@ -472,6 +473,8 @@ export function process_from_server(messages) {
         const local_id = messages.local_id;
         const raw_message= waiting_for_ack.get(local_id).raw_content
         console.log("message.content = client_message.content",raw_message);
+        messages.raw_content= raw_message
+        console.log(messages.raw_content)
 
         }
 
