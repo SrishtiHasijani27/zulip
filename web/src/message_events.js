@@ -115,6 +115,7 @@ function maybe_add_narrowed_messages(messages, msg_list, callback, attempt = 1) 
 
 export function insert_new_messages(messages, sent_by_this_client) {
     messages = messages.map((message) => message_helper.process_new_message(message));
+    console.log("insert_new_messages....",messages)
 
     const any_untracked_unread_messages = unread.process_loaded_messages(messages, false);
     huddle_data.process_loaded_messages(messages);
@@ -165,6 +166,7 @@ export function insert_new_messages(messages, sent_by_this_client) {
     stream_list.update_streams_sidebar();
     pm_list.update_private_messages();
     recent_topics_ui.process_messages(messages);
+
 }
 
 export function update_messages(events) {
@@ -229,6 +231,7 @@ export function update_messages(events) {
 
                 // Update raw_content, so that editing a few times in a row is fast.
                 anchor_message.raw_content = event.content;
+                console.log("anchor_message.raw_content = event.content;",anchor_message.raw_content)
             }
 
             if (unread.update_message_for_mention(anchor_message, any_message_content_edited)) {
@@ -559,6 +562,7 @@ export function update_messages(events) {
         // produce correct results.
         compose_fade.update_message_list();
     }
+    console.log("compose_fade.update_message_list().........")
 
     unread_ui.update_unread_counts();
     stream_list.update_streams_sidebar();

@@ -113,6 +113,7 @@ function get_events_success(events) {
                 // correctly.
 
                 message_events.insert_new_messages(messages, sent_by_this_client);
+
             }
         } catch (error) {
             blueslip.error("Failed to insert new messages", undefined, error);

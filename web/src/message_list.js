@@ -93,6 +93,7 @@ export class MessageList {
         // This adds all messages to our data, but only returns
         // the currently viewable ones.
         const info = this.data.add_messages(messages);
+        console.log("add_messages(messages, opts)",info)
 
         const top_messages = info.top_messages;
         const bottom_messages = info.bottom_messages;
