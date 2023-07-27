@@ -43,6 +43,7 @@ function show_retry_spinner($row) {
     return true;
 }
 
+
 function hide_retry_spinner($row) {
     const $retry_spinner = $row.find(".refresh-failed-message");
 
@@ -179,7 +180,7 @@ export function insert_local_message(message_request, local_id_float, insert_new
     // for zulip.js:add_message
     // Keep this in sync with changes to compose.create_message_object
     const message = {...message_request};
-    message.translation_status = "original";
+
     message.original_content = message.content;
     message.raw_content = message.content;
     console.log("Message is  ",message.raw_content)
@@ -264,8 +265,12 @@ export function try_deliver_locally(message_request, insert_new_messages) {
     if (compose_ui.is_full_size()) {
         compose_ui.make_compose_box_original_size();
     }
+    const currentUser = page_params.user_id;
+    const isSender = message_request.sender_id === currentUser;
 
     const message = insert_local_message(message_request, local_id_float, insert_new_messages);
+    console.log("try deliver locally....", message)
+
     return message;
 }
 
@@ -408,7 +413,7 @@ export function process_from_server(messages) {
             failed_message_success(message.id);
         }
         const isSender = people.is_current_user(message.sender_email);
-        if(!isSender) {
+
             if (client_message.content !== message.content) {
                 client_message.content = message.content;
                 console.log("Client message.....", client_message.content)
@@ -416,7 +421,7 @@ export function process_from_server(messages) {
                 console.log("Raw message......", message.raw_content)
                 sent_messages.mark_disparity(local_id);
             }
-        }
+
 
         sent_messages.report_event_received(local_id);
 
@@ -440,8 +445,11 @@ export function process_from_server(messages) {
         client_message.submessages = message.submessages;
 
         msgs_to_rerender.push(client_message);
+        message.raw_content = waiting_for_ack.get(local_id).raw_content;
+        console.log("message.raw_content = waiting_for_ack.get(local_id).raw_content;", message.raw_content)
 
         waiting_for_ack.delete(local_id);
+
 
     }
 
@@ -454,6 +462,7 @@ export function process_from_server(messages) {
             msg_list.view.rerender_messages(msgs_to_rerender);
         }
     }
+
        // for (const message of non_echo_messages) {
        //     const local_id = message.local_id;
        //     const client_message = waiting_for_ack.get(local_id);
@@ -529,3 +538,4 @@ export function initialize({on_send_message_success}) {
     on_failed_action(".remove-failed-message", abort_message);
     on_failed_action(".refresh-failed-message", resend_message);
 }
+
