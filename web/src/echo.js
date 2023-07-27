@@ -269,7 +269,7 @@ export function try_deliver_locally(message_request, insert_new_messages) {
     const isSender = message_request.sender_id === currentUser;
     if(isSender)
     {
-        message_request.content=message_request.raw_content
+        message_request.content=message_request.draft_id
         console.log(message_request.content)
     }
 
