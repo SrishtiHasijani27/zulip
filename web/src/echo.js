@@ -24,6 +24,7 @@ import * as stream_topic_history from "./stream_topic_history";
 import * as transmit from "./transmit";
 import * as util from "./util";
 import {message_content} from "./compose_state";
+import {is_current_user} from "./people";
 
 // Docs: https://zulip.readthedocs.io/en/latest/subsystems/sending-messages.html
 
@@ -412,9 +413,12 @@ export function process_from_server(messages) {
             failed_message_success(message.id);
         }
         let isSender = false;
-        if (message.sender_email === people.my_current_email()) {
-            isSender =true;
-        }
+        const isCurrentUser = people.is_current_user(message.sender_email )
+        console.log("isCurrent User", isCurrentUser)
+        console.log("Sender Email is ",message.sender_email)
+        // if (message.sender_email === people.is_current_user() {
+        //     isSender =true;
+        // }
         console.log("const isSender..............value", !(isSender))
         console.log("const isSender", !(isSender))
 
