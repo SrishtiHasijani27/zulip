@@ -928,6 +928,8 @@ def do_send_messages(
     # * Adding links to the embed_links queue for open graph processing.
     for send_request in send_message_requests:
         send_request.message.content = send_request.message.translated_content
+        send_request.message.rendered_content=send_request.message.translated_content
+
         print(f"Message translated before save", send_request.message.content)
         realm_id: Optional[int] = None
         if send_request.message.is_stream_message():
