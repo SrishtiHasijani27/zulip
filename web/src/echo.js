@@ -416,14 +416,12 @@ export function process_from_server(messages) {
         const isCurrentUser = people.is_current_user(message.sender_email )
         console.log("isCurrent User", isCurrentUser)
         console.log("Sender Email is ",message.sender_email)
-        // if (message.sender_email === people.is_current_user() {
-        //     isSender =true;
-        // }
-        console.log("const isSender..............value", !(isSender))
+
+        console.log("people.my_current_email()..............value", people.my_current_email())
         console.log("const isSender", !(isSender))
 
             if (client_message.content !== message.content) {
-                if (!isSender) {
+                if (messages.sender_email !== people.my_current_email())  {
                     client_message.content = message.content;
                     console.log("Client message.....", client_message.content)
                     console.log("message.content..............", message.content)
