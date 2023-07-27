@@ -448,8 +448,8 @@ export function process_from_server(messages) {
         message.raw_content = waiting_for_ack.get(local_id).raw_content;
         console.log("message.raw_content = waiting_for_ack.get(local_id).raw_content;", message.raw_content)
          if (message.sender_email === people.my_current_email()) {
-             client_message.content = client_message.content;
-             console.log(client_message.content)
+                client_message.content = message.raw_content;
+             console.log("message.content = client_message.content",client_message.content)
              sent_messages.mark_disparity(local_id);
 
 
