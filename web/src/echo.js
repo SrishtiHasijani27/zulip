@@ -265,13 +265,7 @@ export function try_deliver_locally(message_request, insert_new_messages) {
     if (compose_ui.is_full_size()) {
         compose_ui.make_compose_box_original_size();
     }
-    const currentUser = page_params.user_id;
-    const isSender = message_request.sender_id === currentUser;
-    if(isSender)
-    {
-        message_request.content=message_request.draft_id
-        console.log(message_request.content)
-    }
+
 
     const message = insert_local_message(message_request, local_id_float, insert_new_messages);
     console.log("try deliver locally....", message)
