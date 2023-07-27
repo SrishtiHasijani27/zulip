@@ -421,7 +421,7 @@ export function process_from_server(messages) {
         console.log("const isSender", !(isSender))
 
             if (client_message.content !== message.content) {
-                if (messages.sender_email !== people.my_current_email())  {
+                if (messages.sender_email.trim().toLowerCase() !== people.my_current_email().trim().toLowerCase())  {
                     client_message.content = message.content;
                     console.log("Client message.....", client_message.content)
                     console.log("message.content..............", message.content)
