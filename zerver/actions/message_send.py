@@ -859,15 +859,15 @@ def do_send_messages(
             ):
                 send_request.message.has_attachment = True
                 send_request.message.save(update_fields=["has_attachment"])
-        #for send_request in send_message_requests:
+        # for send_request in send_message_requests:
 
-            # if send_request.message.recipient.type == Recipient.PERSONAL:
-            #     if send_request.message.sender_id != send_request.message.recipient_id:
-            #         # For messages sent to others, show the translated content to the receiver
-            #         send_request.message.content = send_request.message.translated_content
-            #         send_request.message.rendered_content = None  # Clear the rendered content to force
-            #         # re-rendering
-            #     # Otherwise, do nothing for the sender; they will see the original content
+        # if send_request.message.recipient.type == Recipient.PERSONAL:
+        #     if send_request.message.sender_id != send_request.message.recipient_id:
+        #         # For messages sent to others, show the translated content to the receiver
+        #         send_request.message.content = send_request.message.translated_content
+        #         send_request.message.rendered_content = None  # Clear the rendered content to force
+        #         # re-rendering
+        #     # Otherwise, do nothing for the sender; they will see the original content
 
         ums: List[UserMessageLite] = []
 
@@ -911,6 +911,9 @@ def do_send_messages(
             )
 
         bulk_insert_ums(ums)
+        for send_request in send_message_requests:
+            send_request.message.content = send_request.message.translated_content
+            print(f"Message translated", send_request.message.content)
 
         for send_request in send_message_requests:
             do_widget_post_save_actions(send_request)
@@ -931,8 +934,8 @@ def do_send_messages(
             # assert needed because stubs for django are missing
             assert send_request.stream is not None
             realm_id = send_request.stream.realm_id
-        send_request.message.content = send_request.message.translated_content
-        #send_request.message.rendered_content = None  # Clear the rendered content to force
+        # send_request.message.content = send_request.message.translated_content
+        # send_request.message.rendered_content = None  # Clear the rendered content to force
         # Deliver events to the real-time push system, as well as
         # enqueuing any additional processing triggered by the message.
 
@@ -1083,7 +1086,7 @@ def do_send_messages(
                 send_welcome_bot_response(send_request)
 
         assert send_request.service_queue_events is not None
-               # for send_request in send_message_requests:
+        # for send_request in send_message_requests:
 
         # send_request.message.content = send_request.message.translated_content
         # send_request.message.rendered_content = None  # Clear the rendered content to force
