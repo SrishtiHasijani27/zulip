@@ -266,6 +266,7 @@ export function send_message(request = create_message_object()) {
         // message would send. Ensure that the displayed count is correct.
         drafts.sync_count();
     }
+    console.log("transmit success....",request.content)
 
     transmit.send_message(request, success, error);
     server_events.assert_get_events_running(

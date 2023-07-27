@@ -26,8 +26,7 @@ export function process_new_message(message) {
 
     message_store.set_message_booleans(message);
     message.sent_by_me = people.is_current_user(message.sender_email);
-    console.log("raw content is......",message.raw_content)
-    console.log("message content in helper====", message.content);
+
 
     people.extract_people_from_message(message);
     people.maybe_incr_recipient_count(message);

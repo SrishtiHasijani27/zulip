@@ -123,7 +123,7 @@ export const message_content = get_or_set("compose-textarea", true);
 
 
 const untrimmed_message_content = get_or_set("compose-textarea", true, true);
-console.log("message_content=========",untrimmed_message_content)
+
 function cursor_at_start_of_whitespace_in_compose() {
     const cursor_position = $("#compose-textarea").caret();
     return message_content() === "" && cursor_position === 0;
