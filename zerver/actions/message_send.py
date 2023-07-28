@@ -645,7 +645,7 @@ def build_message_send_dict(
     default_bot_user_ids = info.default_bot_user_ids
     mentioned_bot_user_ids = default_bot_user_ids & mentioned_user_ids
     info.um_eligible_user_ids |= mentioned_bot_user_ids
-
+    message.translated_content=message.translated_content
     message_send_dict = SendMessageRequest(
         stream=stream,
         local_id=local_id,
@@ -679,6 +679,7 @@ def build_message_send_dict(
         disable_external_notifications=disable_external_notifications,
 
     )
+    print(f"Message Send dict in sendMessage is ", message_send_dict)
 
     return message_send_dict
 
