@@ -566,6 +566,7 @@ def build_message_send_dict(
     mention_data = MentionData(
         mention_backend=mention_backend,
         content=message.content,
+
     )
 
     if message.is_stream_message():
@@ -645,7 +646,7 @@ def build_message_send_dict(
     default_bot_user_ids = info.default_bot_user_ids
     mentioned_bot_user_ids = default_bot_user_ids & mentioned_user_ids
     info.um_eligible_user_ids |= mentioned_bot_user_ids
-    message.translated_content=message.translated_content
+    message.translated_content = message.translated_content
     message_send_dict = SendMessageRequest(
         stream=stream,
         local_id=local_id,
@@ -1603,6 +1604,7 @@ def check_message(
         disable_external_notifications=disable_external_notifications,
 
     )
+    print(f"Check Message ", message_send_dict)
 
     if (
         stream is not None
