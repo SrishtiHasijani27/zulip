@@ -2,7 +2,7 @@ import re
 from translate import Translator
 
 
-def translate_message_with_exceptions(message, target_language):
+def translate_message(message, target_language):
     # Regular expression to identify links in the message
     link_pattern = r'http[s]?://\S+'
     # Regular expression to identify emojis in the message
