@@ -16,7 +16,7 @@ def translate_message(message, target_language):
     # Find all emojis in the message and replace them with placeholders
     emojis = re.findall(emoji_pattern, message)
     for emoji in emojis:
-        message = message.replace(emoji, '')
+        message = message.replace(emoji, f'<emoji_placeholder_{emojis.index(emoji)}>')
 
     # Translate the message using the translate module
     translator = Translator(to_lang=target_language)
@@ -25,5 +25,7 @@ def translate_message(message, target_language):
     # Replace the placeholders with the original links and emojis
     for i, link in enumerate(links):
         translated_message = translated_message.replace(f'<link_placeholder_{i}>', link)
+    for i, emoji in enumerate(emojis):
+        translated_message = translated_message.replace(f'<emoji_placeholder_{i}>', emoji)
 
     return translated_message
