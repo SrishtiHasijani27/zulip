@@ -58,6 +58,7 @@ def translate_message(text, target_language_code):
 
     # Translate the text with placeholders using the specified target language code
     translated_text_with_placeholders = translator.translate(text_with_placeholders)
+    print(f"translated_text_with_placeholders",translated_text_with_placeholders)
 
     # Restore the original links and emojis in the translated text
     translated_text = restore_placeholders_with_links_and_emojis(translated_text_with_placeholders, links,

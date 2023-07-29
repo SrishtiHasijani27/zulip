@@ -1591,7 +1591,6 @@ def check_message(
                 )
             )
 
-
     message_send_dict = build_message_send_dict(
         message=message,
         stream=stream,

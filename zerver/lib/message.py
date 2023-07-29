@@ -413,7 +413,7 @@ class MessageDict:
         MessageDict.set_sender_avatar(obj, client_gravatar)
         if apply_markdown:
             obj["content_type"] = "text/html"
-            print(f"keep_rendered_content.............  \n", obj["rendered_content"])
+           # print(f"keep_rendered_content.............  \n", obj["rendered_content"])
             obj["content"] = obj["rendered_content"]
 
         else:
