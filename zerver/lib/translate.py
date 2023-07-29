@@ -27,6 +27,3 @@ def translate_message(message, target_language):
         translated_message = translated_message.replace(f'<link_placeholder_{i}>', link)
 
     return translated_message
-
-
-
