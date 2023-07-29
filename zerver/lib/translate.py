@@ -8,7 +8,7 @@ def extract_emojis(text):
     return ''.join(c for c in text if c in emoji.UNICODE_EMOJI)
 
 
-def translate_message_with_exceptions(message, target_language):
+def translate_messages(message, target_language):
     # Regular expression to identify links in the message
     link_pattern = r'http[s]?://\S+'
 
