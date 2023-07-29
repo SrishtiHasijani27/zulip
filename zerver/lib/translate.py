@@ -4,8 +4,9 @@ from translate import Translator
 
 
 def extract_emojis(text):
-    # Function to extract emojis from the text
-    return ''.join(c for c in text if c in emoji.UNICODE_EMOJI)
+    # Regular expression to identify emojis in the text
+    emoji_pattern = r'[^\u0000-\u007F]+'
+    return ''.join(c for c in text if re.match(emoji_pattern, c))
 
 
 def translate_message(message, target_language):
@@ -37,6 +38,4 @@ def translate_message(message, target_language):
                                                         emoji_char)
 
     return translated_message
-
-
 
