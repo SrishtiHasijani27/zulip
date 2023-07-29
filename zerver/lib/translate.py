@@ -6,8 +6,7 @@ def translate_message(message, target_language):
     # Regular expression to identify links in the message
     link_pattern = r'http[s]?://\S+'
     # Regular expression to identify emojis in the message
-    emoji_pattern = r'[^\w\s,]'
-    print(f"Original message is ", message)
+    emoji_pattern = r':[^\s]+:'
 
     # Find all links in the message and replace them with placeholders
     links = re.findall(link_pattern, message)
@@ -18,7 +17,6 @@ def translate_message(message, target_language):
     emojis = re.findall(emoji_pattern, message)
     for emoji in emojis:
         message = message.replace(emoji, '')
-        print(f"message after emoji is :",message)
 
     # Translate the message using the translate module
     translator = Translator(to_lang=target_language)
