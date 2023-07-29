@@ -1203,7 +1203,7 @@ def post_process_limited_query(
         after_rows = [r for r in visible_rows if r[0] > anchor]
 
     if num_before:
-        before_rows = before_rows[-1 * num_before :]
+        before_rows = before_rows[-1 * num_before:]
 
     if num_after:
         after_rows = after_rows[:num_after]
@@ -1331,7 +1331,7 @@ def fetch_messages(
         # This is a hack to tag the query we use for testing
         query = query.prefix_with("/* get_messages */")
         rows = list(sa_conn.execute(query).fetchall())
-
+        print(f"Hindustan zindabad... \n", rows)
     query_info = post_process_limited_query(
         rows=rows,
         num_before=num_before,
@@ -1341,8 +1341,20 @@ def fetch_messages(
         anchored_to_right=anchored_to_right,
         first_visible_message_id=first_visible_message_id,
     )
+    # return
 
-    return FetchedMessages(
+    # return FetchedMessages(
+    #     rows=query_info.rows,
+    #     found_anchor=query_info.found_anchor,
+    #     found_newest=query_info.found_newest,
+    #     found_oldest=query_info.found_oldest,
+    #     history_limited=query_info.history_limited,
+    #     anchor=anchor,
+    #     include_history=include_history,
+    #     is_search=is_search,
+    # )
+
+    abc = FetchedMessages(
         rows=query_info.rows,
         found_anchor=query_info.found_anchor,
         found_newest=query_info.found_newest,
@@ -1352,3 +1364,5 @@ def fetch_messages(
         include_history=include_history,
         is_search=is_search,
     )
+    print("f Returning value........\n",abc)
+    return abc
