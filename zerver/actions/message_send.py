@@ -1590,7 +1590,7 @@ def check_message(
                     error_msg=error.message,
                 )
             )
-       
+
 
     message_send_dict = build_message_send_dict(
         message=message,

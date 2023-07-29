@@ -72,7 +72,7 @@ def get_search_fields(
     content_matches: Iterable[Tuple[int, int]],
     topic_matches: Iterable[Tuple[int, int]],
 ) -> Dict[str, str]:
-    print(f"highlight_string(rendered_content, rendered_content),",rendered_content)
+    print(f"highlight_string(rendered_content, rendered_content),", rendered_content)
     print(f"highlight_string(content_matches, content_matches),", content_matches)
     return {
         "match_content": highlight_string(rendered_content, content_matches),
@@ -95,7 +95,6 @@ def get_messages_backend(
     client_gravatar: bool = REQ(json_validator=check_bool, default=True),
     apply_markdown: bool = REQ(json_validator=check_bool, default=True),
 ) -> HttpResponse:
-
     anchor = parse_anchor_value(anchor_val, use_first_unread_anchor_val)
     if num_before + num_after > MAX_MESSAGES_PER_FETCH:
         raise JsonableError(
@@ -223,7 +222,7 @@ def get_messages_backend(
         client_gravatar=client_gravatar,
         allow_edit_history=realm.allow_edit_history,
     )
-
+    print(f"message list............ \n", message_list)
     ret = dict(
         messages=message_list,
         result="success",
@@ -234,7 +233,7 @@ def get_messages_backend(
         history_limited=query_info.history_limited,
         anchor=anchor,
     )
-
+    print("f... Returning Dict json request......json_success(request, data=ret) \n ", ret)
     return json_success(request, data=ret)
 
 
