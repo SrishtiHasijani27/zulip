@@ -285,12 +285,21 @@ def messages_for_ids(
         # Extract the content of the message
         message_content = message['content']
 
-        recipient_ids = [recipient['id'] for recipient in message['display_recipient']]
-
-        translated_message = translate_messages(message_content, recipient_ids)
+        recipient_ids = extract_recipient_ids(message)
+        for user_id in recipient_ids:
+        translated_message = translate_messages(message_content, user_id)
         message['content'] = translated_message
 
     return message_list
+
+
+def extract_recipient_ids(message):
+    display_recipient = message.get('display_recipient')
+    if isinstance(display_recipient, list):
+        recipient_ids = [recipient['id'] for recipient in display_recipient]
+    else:
+        recipient_ids = []
+    return recipient_ids
 
 
 def sew_messages_and_reactions(
