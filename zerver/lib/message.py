@@ -265,7 +265,7 @@ def messages_for_ids(
         recipient_id = msg_dict.get("recipient_id")
         rendered_content = msg_dict.get("rendered_content")
 
-        max_messages = 30
+        max_messages = 5
 
         # print(f"  msg_dict = message_dicts[message_id]",msg_dict)
         msg_dict.update(flags=user_message_flags[message_id])
