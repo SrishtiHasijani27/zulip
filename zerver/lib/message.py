@@ -230,7 +230,9 @@ def truncate_topic(topic: str) -> str:
 
 
 def translate_messages(message_content, recipient_id):
+    print(f"recipient_id=========",recipient_id)
     recipient_profile = UserProfile.objects.get(id=recipient_id)
+    print(f"Recepient profile=========",recipient_profile)
 
     preferred_language = recipient_profile.preferred_language
     print(f"Recepient_id is ", recipient_profile.recipient)
@@ -276,13 +278,13 @@ def messages_for_ids(
         message_list.append(msg_dict)
 
     MessageDict.post_process_dicts(message_list, apply_markdown, client_gravatar)
-    # print(f"Post process dicts....... \n", message_list)
+    print(f"Post process dicts....... \n", message_list)
     # for msg_list in message_list
     for message in message_list:
         # Extract the content of the message
         message_content = message['content']
-        user_id = message['recipient_id']
-        translated_message = translate_messages(message_content, user_id)
+        recipient_id = message['recipient_id']
+        translated_message = translate_messages(message_content, recipient_id)
         message['content'] = translated_message
 
     return message_list
