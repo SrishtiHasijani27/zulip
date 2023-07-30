@@ -264,21 +264,16 @@ def messages_for_ids(
         if "edit_history" in msg_dict and not allow_edit_history:
             del msg_dict["edit_history"]
 
-            # Extract recipient_id and content from the message dictionary
-        # message_content = msg_dict["content"]
-        #
-        # print(f"  message_content = msg_dict[content]", message_content)
-        # recipient_id = msg_dict["recipient_id"]
-        # message_content = msg_dict["content"]
-        # print(f"  message_content = msg_dict[content]",message_content)
-        #
-        # # Call the translate_content method here with recipient_id and content
-        # translated_content = translate_messages(message_content, recipient_id)
-        #
-        # # Update the content field in the message dictionary with the translated content
-        # msg_dict["content"] = translated_content
-        #
-        # # Append the updated message dictionary to the message_list
+            # Extract recipient_id, recipient_type_id, and content from the message dictionary
+        recipient_type_id = msg_dict.get("recipient_type_id", None)
+        recipient_id = msg_dict.get("recipient_id", None)
+        message_content = msg_dict.get("content", "")
+
+      # If the recipient_type_id exists and the content is not empty, perform translation
+        if recipient_type_id and message_content:
+            translated_content = translate_messages(message_content, recipient_id)
+            msg_dict["content"] = translated_content
+
         message_list.append(msg_dict)
 
     MessageDict.post_process_dicts(message_list, apply_markdown, client_gravatar)
@@ -288,22 +283,7 @@ def messages_for_ids(
     return message_list
 
 
-# def translate_message_content(message_list):
-#     recipient_ids = []
-#     contents = []
-#     # Assuming message_list contains the list of messages
-#     for message in message_list:
-#         recipient_id = message['recipient_id']
-#         content = message['content']
-#         recipient_ids.append(recipient_id)
-#         contents.append(content)
-#     for recipient_id, content in zip(recipient_ids, contents):
-#         translate_messages(content, recipient_id)
-#
-#     return message_list
 
-
-#
 def translate_messages(message_content, recipient_id):
     print(f"recipient_id=========", recipient_id)
     recipient_profile = UserProfile.objects.get(id=recipient_id)
