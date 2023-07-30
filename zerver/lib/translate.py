@@ -1,5 +1,5 @@
 import re
-import emojis
+import emoji
 from translate import Translator
 
 
@@ -21,14 +21,14 @@ def translate_message(message, target_language):
     emojis_in_text = extract_emojis(message)
 
     # Remove emojis from the message
-    message_without_emojis = ''.join(c for c in message if c not in emojis.UNICODE_EMOJI)
+    message_without_emojis = ''.join(c for c in message if c not in emoji.UNICODE_EMOJI)
 
     # Translate the message without emojis using the translate module
     translator = Translator(to_lang=target_language)
     translated_message_without_emojis = translator.translate(message_without_emojis)
 
     # Reinsert emojis back into the translated message
-    translated_message = ''.join([a + b if b in emojis.UNICODE_EMOJI else a for a, b in
+    translated_message = ''.join([a + b if b in emoji.UNICODE_EMOJI else a for a, b in
                                   zip(translated_message_without_emojis, emojis_in_text)])
 
     # Replace the placeholders with the original links
