@@ -1543,26 +1543,9 @@ def check_message(
 
     original_message = message_content
     message.recipient = recipient
-    # print(f"recepient name is ", recipient)
-    # print(f"Original message before translation", original_message)
-    #
-    # translated_message = translate_messages(original_message, message.recipient.type_id)
-    # print(f"translate_message", translated_message)
-    message.content = original_message
-    # message.translated_content = translated_message
-    # print(f"Translated message in check_message()", translated_message)
-    # # assert message.translated_content is translated_message
 
-    # message.content = str(original_message)
-    # message.translated_content = str(translated_message)
-    # assert message.translated_content is translated_message
-    # print(f"Data saved to DB", Message.translated_content)
-    # if sender == recipient:
-    #     # Use original_message for sender
-    #     message.content = original_message
-    # else:
-    #     # Use translated_message for recipient
-    #     message.content = str(translated_message)
+    message.content = original_message
+    
 
     message.realm = realm
     if addressee.is_stream():
