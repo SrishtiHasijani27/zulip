@@ -265,17 +265,17 @@ def messages_for_ids(
 
             # Extract recipient_id and content from the message dictionary
 
-        recipient_id = msg_dict["recipient_id"]
-        message_content = msg_dict["content"]
-        print(f"  message_content = msg_dict[content]",message_content)
-
-        # Call the translate_content method here with recipient_id and content
-        translated_content = translate_messages(message_content, recipient_id)
-
-        # Update the content field in the message dictionary with the translated content
-        msg_dict["content"] = translated_content
-
-        # Append the updated message dictionary to the message_list
+        # recipient_id = msg_dict["recipient_id"]
+        # message_content = msg_dict["content"]
+        # print(f"  message_content = msg_dict[content]",message_content)
+        #
+        # # Call the translate_content method here with recipient_id and content
+        # translated_content = translate_messages(message_content, recipient_id)
+        #
+        # # Update the content field in the message dictionary with the translated content
+        # msg_dict["content"] = translated_content
+        #
+        # # Append the updated message dictionary to the message_list
         message_list.append(msg_dict)
 
     MessageDict.post_process_dicts(message_list, apply_markdown, client_gravatar)
