@@ -1,11 +1,10 @@
 import re
-import demoji
 from translate import Translator
 
 
 def extract_emojis(text):
-    emojis = demoji.findall(text)
-    return ''.join(emojis)
+    emoji_pattern = r'[^\u0000-\u007F]+'
+    return ''.join(c for c in text if re.match(emoji_pattern, c))
 
 
 def translate_message(message, target_language):
@@ -18,17 +17,19 @@ def translate_message(message, target_language):
         message = message.replace(link, f'<link_placeholder_{links.index(link)}>')
 
     # Extract emojis from the message
-    emojis_in_text = extract_emojis(message)
+    emojis = extract_emojis(message)
 
-    # Remove emojis from the message
-    message_without_emojis = demoji.replace(message, '')
+    # Remove emojis from the message and replace them with placeholders
+    for emoji_char in emojis:
+        message = message.replace(emoji_char, f'<emoji_placeholder_{emojis.index(emoji_char)}>')
 
     # Translate the message without emojis using the translate module
     translator = Translator(to_lang=target_language)
-    translated_message_without_emojis = translator.translate(message_without_emojis)
+    translated_message = translator.translate(message)
 
     # Reinsert emojis back into the translated message
-    translated_message = demoji.replace(translated_message_without_emojis, emojis_in_text)
+    for i, emoji_char in enumerate(emojis):
+        translated_message = translated_message.replace(f'<emoji_placeholder_{i}>', emoji_char)
 
     # Replace the placeholders with the original links
     for i, link in enumerate(links):
