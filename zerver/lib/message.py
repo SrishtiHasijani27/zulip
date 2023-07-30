@@ -201,7 +201,6 @@ class SendMessageRequest:
     disable_external_notifications: bool = False
 
 
-
 # We won't try to fetch more unread message IDs from the database than
 # this limit.  The limit is super high, in large part because it means
 # client-side code mostly doesn't need to think about the case that a
@@ -263,7 +262,8 @@ def messages_for_ids(
         message_list.append(msg_dict)
 
     MessageDict.post_process_dicts(message_list, apply_markdown, client_gravatar)
-    print(f"Post process dicts....... \n", message_list)
+    # print(f"Post process dicts....... \n", message_list)
+    # for msg_list in message_list
 
     return message_list
 
@@ -370,7 +370,6 @@ class MessageDict:
 
         return obj
 
-
     @staticmethod
     def post_process_dicts(
         objs: List[Dict[str, Any]], apply_markdown: bool, client_gravatar: bool
@@ -388,8 +387,6 @@ class MessageDict:
 
         for obj in objs:
             MessageDict.finalize_payload(obj, apply_markdown, client_gravatar, skip_copy=True)
-
-
 
     @staticmethod
     def finalize_payload(
@@ -417,7 +414,7 @@ class MessageDict:
         MessageDict.set_sender_avatar(obj, client_gravatar)
         if apply_markdown:
             obj["content_type"] = "text/html"
-           # print(f"keep_rendered_content.............  \n", obj["rendered_content"])
+            # print(f"keep_rendered_content.............  \n", obj["rendered_content"])
             obj["content"] = obj["rendered_content"]
 
         else:
@@ -567,7 +564,6 @@ class MessageDict:
         recipient_type_id: int,
         reactions: List[RawReactionRow],
         submessages: List[Dict[str, Any]],
-
 
     ) -> Dict[str, Any]:
         obj = dict(
