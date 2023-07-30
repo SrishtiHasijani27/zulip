@@ -229,20 +229,6 @@ def truncate_topic(topic: str) -> str:
     return truncate_content(topic, MAX_TOPIC_NAME_LENGTH, "...")
 
 
-def translate_messages(message_content, recipient_id):
-    print(f"recipient_id=========", recipient_id)
-    recipient_profile = UserProfile.objects.get(id=recipient_id)
-    print(f"Recepient profile=========", recipient_profile)
-
-    preferred_language = recipient_profile.preferred_language
-    print(f"Recepient_id is ", recipient_profile.recipient)
-    print(f"recipient_profile.preferred_language", preferred_language)
-
-    translated_content = translate_message(message_content, preferred_language)
-
-    return translated_content
-
-
 def messages_for_ids(
     message_ids: List[int],
     user_message_flags: Dict[int, List[str]],
@@ -265,6 +251,7 @@ def messages_for_ids(
     )
 
     message_list: List[Dict[str, Any]] = []
+    print(f"message list is message_list: List[Dict[str, Any]] = []", message_list)
 
     for message_id in message_ids:
         msg_dict = message_dicts[message_id]
@@ -278,38 +265,52 @@ def messages_for_ids(
         message_list.append(msg_dict)
 
     MessageDict.post_process_dicts(message_list, apply_markdown, client_gravatar)
-    print(f"Post process dicts....... \n", message_list)
-    translate_messages(message_list)
-    # for msg_list in message_list
+    # print(f"Post process dicts....... \n", message_list)
+    #  translate_message_content(message_list)
+    #  # for msg_list in message_list
     return message_list
 
 
-def translate_message_content(message_list):
-    # Assuming message_list contains the list of messages
-    for message in message_list:
-        # Extract recipient IDs from the 'display_recipient' field
-        recipient_ids = extract_recipient_ids(message)
-
-        # Translate the content of the message for each recipient
-        translated_contents = []
-        message_content = message['content']
-        for user_id in recipient_ids:
-            translated_message = translate_messages(message_content, user_id)
-            translated_contents.append(translated_message)
-
-        # Update the message content with the translated content
-        message['content'] = translated_contents
-
-    return message_list
-
-
-def extract_recipient_ids(message):
-    display_recipient = message.get('display_recipient')
-    if isinstance(display_recipient, list):
-        recipient_ids = [recipient['id'] for recipient in display_recipient]
-    else:
-        recipient_ids = []
-    return recipient_ids
+# def translate_message_content(message_list):
+#     # Assuming message_list contains the list of messages
+#     for message in message_list:
+#         # Extract recipient IDs from the 'display_recipient' field
+#         recipient_ids = extract_recipient_ids(message)
+#
+#         # Translate the content of the message for each recipient
+#         translated_contents = []
+#         message_content = message['content']
+#         for user_id in recipient_ids:
+#             translated_message = translate_messages(message_content, user_id)
+#             translated_contents.append(translated_message)
+#
+#         # Update the message content with the translated content
+#         message['content'] = translated_contents
+#
+#     return message_list
+#
+#
+# def translate_messages(message_content, recipient_id):
+#     print(f"recipient_id=========", recipient_id)
+#     recipient_profile = UserProfile.objects.get(id=recipient_id)
+#     print(f"Recepient profile=========", recipient_profile)
+#
+#     preferred_language = recipient_profile.preferred_language
+#     print(f"Recepient_id is ", recipient_profile.recipient)
+#     print(f"recipient_profile.preferred_language", preferred_language)
+#
+#     translated_content = translate_message(message_content, preferred_language)
+#
+#     return translated_content
+#
+#
+# def extract_recipient_ids(message):
+#     display_recipient = message.get('display_recipient')
+#     if isinstance(display_recipient, list):
+#         recipient_ids = [recipient['id'] for recipient in display_recipient]
+#     else:
+#         recipient_ids = []
+#     return recipient_ids
 
 
 def sew_messages_and_reactions(
