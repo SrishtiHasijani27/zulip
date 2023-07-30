@@ -1,6 +1,5 @@
 import re
 from translate import Translator
-import emoji
 
 
 def extract_emojis(text):
@@ -8,25 +7,30 @@ def extract_emojis(text):
     return ''.join(c for c in text if re.match(emoji_pattern, c))
 
 
-def translate_message(message, target_language):
-    # Regular expression to identify links in the message
+def remove_links(message):
     link_pattern = r'http[s]?://\S+'
+    return re.sub(link_pattern, '', message)
 
-    # Find all links in the message and replace them with placeholders
-    links = re.findall(link_pattern, message)
-    for link in links:
-        message = message.replace(link, f'<link_placeholder_{links.index(link)}>')
 
+def translate_message(message, target_language):
     # Extract emojis from the message
     emojis = extract_emojis(message)
 
-    # Remove emojis from the message and replace them with placeholders
-    for emoji_char in emojis:
-        message = message.replace(emoji_char, f'<emoji_placeholder_{emojis.index(emoji_char)}>')
+    # Remove links from the message and replace them with placeholders
+    message_without_links = remove_links(message)
+    links = re.findall(r'http[s]?://\S+', message)
+    for link in links:
+        message_without_links = message_without_links.replace(link, f'<link_placeholder_{links.index(link)}>')
 
-    # Translate the message without emojis using the translate module
+    # Remove <p> tags from the message and replace them with placeholders
+    message_without_p_tags = message_without_links.replace('<p>', '').replace('</p>', '<p_placeholder>')
+
+    # Translate the message without <p> tags using the translate module
     translator = Translator(to_lang=target_language)
-    translated_message = translator.translate(message)
+    translated_message_without_p_tags = translator.translate(message_without_p_tags)
+
+    # Restore the <p> tags in the translated message
+    translated_message = translated_message_without_p_tags.replace('<p_placeholder>', '<p>')
 
     # Reinsert emojis back into the translated message
     for i, emoji_char in enumerate(emojis):

@@ -28,6 +28,7 @@ from psycopg2.sql import SQL
 
 from analytics.lib.counts import COUNT_STATS
 from analytics.models import RealmCount
+from zerver.actions.message_send import translate_messages
 from zerver.lib.avatar import get_avatar_field
 from zerver.lib.cache import (
     cache_set_many,
@@ -264,6 +265,12 @@ def messages_for_ids(
     MessageDict.post_process_dicts(message_list, apply_markdown, client_gravatar)
     # print(f"Post process dicts....... \n", message_list)
     # for msg_list in message_list
+    for message in message_list:
+        # Extract the content of the message
+        message_content = message['content']
+        user_id= message['recipient_id']
+        translated_message = translate_messages(message_content, user_id)
+        message['content'] = translated_message
 
     return message_list
 
