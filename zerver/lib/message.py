@@ -275,18 +275,18 @@ def messages_for_ids(
         if "edit_history" in msg_dict and not allow_edit_history:
             del msg_dict["edit_history"]
 
-        # If the recipient_type_id exists and the content is not empty, perform translation
-        if recipient_type_id and rendered_content and translated_count < max_messages:
-            translated_content = translate_messages(rendered_content, recipient_type_id)
-            msg_dict["rendered_content"] = translated_content
-            translated_count += 1
-            print(f"Translated content for each recipient", translated_content)
 
-        message_list.append(msg_dict)
-        if translated_count >= max_messages:
-            break
 
-        #message_list.append(msg_dict)
+        #message_list.append(msg_dict) # # If the recipient_type_id exists and the content is not empty, perform translation
+        # if recipient_type_id and rendered_content and translated_count < max_messages:
+        #     translated_content = translate_messages(rendered_content, recipient_type_id)
+        #     msg_dict["rendered_content"] = translated_content
+        #     translated_count += 1
+        #     print(f"Translated content for each recipient", translated_content)
+        #
+        # message_list.append(msg_dict)
+        # if translated_count >= max_messages:
+        #     break
 
     MessageDict.post_process_dicts(message_list, apply_markdown, client_gravatar)
     # print(f"Post process dicts....... \n", message_list)
