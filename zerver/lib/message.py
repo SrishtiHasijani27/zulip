@@ -230,9 +230,9 @@ def truncate_topic(topic: str) -> str:
 
 
 def translate_messages(message_content, recipient_id):
-    print(f"recipient_id=========",recipient_id)
+    print(f"recipient_id=========", recipient_id)
     recipient_profile = UserProfile.objects.get(id=recipient_id)
-    print(f"Recepient profile=========",recipient_profile)
+    print(f"Recepient profile=========", recipient_profile)
 
     preferred_language = recipient_profile.preferred_language
     print(f"Recepient_id is ", recipient_profile.recipient)
@@ -280,14 +280,22 @@ def messages_for_ids(
     MessageDict.post_process_dicts(message_list, apply_markdown, client_gravatar)
     print(f"Post process dicts....... \n", message_list)
     # for msg_list in message_list
+
     for message in message_list:
         # Extract the content of the message
         message_content = message['content']
-        recipient_id = message['recipient_id']
+
+        recipient_id = extract_recipient_ids(message)
         translated_message = translate_messages(message_content, recipient_id)
         message['content'] = translated_message
 
     return message_list
+
+
+def extract_recipient_ids(message):
+    display_recipient = message['display_recipient']
+    recipient_id = [recipient['id'] for recipient in display_recipient]
+    return recipient_id
 
 
 def sew_messages_and_reactions(
