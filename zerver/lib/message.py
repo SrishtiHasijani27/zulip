@@ -256,16 +256,17 @@ def messages_for_ids(
     )
     message_list: List[Dict[str, Any]] = []
     translated_count = 0
+    max_messages = 5
     # print(f"message list is message_list: List[Dict[str, Any]] = []", message_list)
 
-    for message_id in message_ids:
+    for message_id in sorted_message_ids:
         msg_dict = message_dicts[message_id]
         # Extract recipient_id, recipient_type_id, and content from the message dictionary
         recipient_type_id = msg_dict.get("recipient_type_id")
         recipient_id = msg_dict.get("recipient_id")
         rendered_content = msg_dict.get("rendered_content")
 
-        max_messages = 5
+
 
         # print(f"  msg_dict = message_dicts[message_id]",msg_dict)
         msg_dict.update(flags=user_message_flags[message_id])
@@ -280,6 +281,7 @@ def messages_for_ids(
         if recipient_type_id and rendered_content and translated_count < max_messages:
             translated_content = translate_messages(rendered_content, recipient_type_id)
             msg_dict["rendered_content"] = translated_content
+            translated_count += 1
             print(f"Translated content for each recipient", translated_content)
 
         message_list.append(msg_dict)
