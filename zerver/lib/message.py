@@ -255,7 +255,7 @@ def messages_for_ids(
 
     for message_id in message_ids:
         msg_dict = message_dicts[message_id]
-        print(f"  msg_dict = message_dicts[message_id]",msg_dict)
+        # print(f"  msg_dict = message_dicts[message_id]",msg_dict)
         msg_dict.update(flags=user_message_flags[message_id])
         if message_id in search_fields:
             msg_dict.update(search_fields[message_id])
@@ -269,10 +269,11 @@ def messages_for_ids(
         recipient_id = msg_dict.get("recipient_id", None)
         message_content = msg_dict.get("content", "")
 
-      # If the recipient_type_id exists and the content is not empty, perform translation
+        # If the recipient_type_id exists and the content is not empty, perform translation
         if recipient_type_id and message_content:
             translated_content = translate_messages(message_content, recipient_id)
             msg_dict["content"] = translated_content
+            print(f"Translated content for each recipient", translated_content)
 
         message_list.append(msg_dict)
 
@@ -281,7 +282,6 @@ def messages_for_ids(
     #  translate_message_content(message_list)
     #  # for msg_list in message_list
     return message_list
-
 
 
 def translate_messages(message_content, recipient_id):
