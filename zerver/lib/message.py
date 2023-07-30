@@ -256,10 +256,10 @@ def messages_for_ids(
     for message_id in message_ids:
         msg_dict = message_dicts[message_id]
         # Extract recipient_id, recipient_type_id, and content from the message dictionary
-        recipient_type_id = msg_dict.get("recipient_type_id", None)
-        recipient_id = msg_dict.get("recipient_id", None)
-        message_content = msg_dict.get("content", "")
-        print(f"message_content = ==========\n",message_content)
+        recipient_type_id = msg_dict.get("recipient_type_id")
+        recipient_id = msg_dict.get("recipient_id")
+        rendered_content = msg_dict.get("rendered_content")
+        print(f"message_content = ==========\n", rendered_content)
 
         # print(f"  msg_dict = message_dicts[message_id]",msg_dict)
         msg_dict.update(flags=user_message_flags[message_id])
