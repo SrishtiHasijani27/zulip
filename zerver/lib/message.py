@@ -266,8 +266,6 @@ def messages_for_ids(
         recipient_id = msg_dict.get("recipient_id")
         rendered_content = msg_dict.get("rendered_content")
 
-
-
         # print(f"  msg_dict = message_dicts[message_id]",msg_dict)
         msg_dict.update(flags=user_message_flags[message_id])
         if message_id in search_fields:
@@ -285,6 +283,10 @@ def messages_for_ids(
             print(f"Translated content for each recipient", translated_content)
 
         message_list.append(msg_dict)
+        if translated_count >= max_messages:
+            break
+
+        #message_list.append(msg_dict)
 
     MessageDict.post_process_dicts(message_list, apply_markdown, client_gravatar)
     # print(f"Post process dicts....... \n", message_list)
