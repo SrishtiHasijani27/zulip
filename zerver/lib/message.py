@@ -262,6 +262,18 @@ def messages_for_ids(
         # in realms with allow_edit_history disabled.
         if "edit_history" in msg_dict and not allow_edit_history:
             del msg_dict["edit_history"]
+
+            # Extract recipient_id and content from the message dictionary
+        recipient_id = msg_dict["recipient_id"]
+        message_content = msg_dict["content"]
+
+        # Call the translate_content method here with recipient_id and content
+        translated_content = translate_messages(message_content, recipient_id)
+
+        # Update the content field in the message dictionary with the translated content
+        msg_dict["content"] = translated_content
+
+        # Append the updated message dictionary to the message_list
         message_list.append(msg_dict)
 
     MessageDict.post_process_dicts(message_list, apply_markdown, client_gravatar)
@@ -272,36 +284,35 @@ def messages_for_ids(
 
 
 # def translate_message_content(message_list):
+#     recipient_ids = []
+#     contents = []
 #     # Assuming message_list contains the list of messages
 #     for message in message_list:
-#         # Extract recipient IDs from the 'display_recipient' field
-#         recipient_ids = extract_recipient_ids(message)
-#
-#         # Translate the content of the message for each recipient
-#         translated_contents = []
-#         message_content = message['content']
-#         for user_id in recipient_ids:
-#             translated_message = translate_messages(message_content, user_id)
-#             translated_contents.append(translated_message)
-#
-#         # Update the message content with the translated content
-#         message['content'] = translated_contents
+#         recipient_id = message['recipient_id']
+#         content = message['content']
+#         recipient_ids.append(recipient_id)
+#         contents.append(content)
+#     for recipient_id, content in zip(recipient_ids, contents):
+#         translate_messages(content, recipient_id)
 #
 #     return message_list
+
+
 #
-#
-# def translate_messages(message_content, recipient_id):
-#     print(f"recipient_id=========", recipient_id)
-#     recipient_profile = UserProfile.objects.get(id=recipient_id)
-#     print(f"Recepient profile=========", recipient_profile)
-#
-#     preferred_language = recipient_profile.preferred_language
-#     print(f"Recepient_id is ", recipient_profile.recipient)
-#     print(f"recipient_profile.preferred_language", preferred_language)
-#
-#     translated_content = translate_message(message_content, preferred_language)
-#
-#     return translated_content
+def translate_messages(message_content, recipient_id):
+    print(f"recipient_id=========", recipient_id)
+    recipient_profile = UserProfile.objects.get(id=recipient_id)
+    print(f"Recepient profile=========", recipient_profile)
+
+    preferred_language = recipient_profile.preferred_language
+    print(f"Recepient_id is ", recipient_profile.recipient)
+    print(f"recipient_profile.preferred_language", preferred_language)
+
+    translated_content = translate_message(message_content, preferred_language)
+
+    return translated_content
+
+
 #
 #
 # def extract_recipient_ids(message):
