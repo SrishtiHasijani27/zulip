@@ -28,7 +28,7 @@ from psycopg2.sql import SQL
 
 from analytics.lib.counts import COUNT_STATS
 from analytics.models import RealmCount
-from zerver.actions.message_send import translate_messages
+
 from zerver.lib.avatar import get_avatar_field
 from zerver.lib.cache import (
     cache_set_many,
@@ -51,6 +51,7 @@ from zerver.lib.stream_subscription import (
 from zerver.lib.streams import get_web_public_streams_queryset
 from zerver.lib.timestamp import datetime_to_timestamp
 from zerver.lib.topic import DB_TOPIC_NAME, MESSAGE__TOPIC, TOPIC_LINKS, TOPIC_NAME
+from zerver.lib.translate import translate_message
 from zerver.lib.types import DisplayRecipientT, EditHistoryEvent, UserDisplayRecipient
 from zerver.lib.url_preview.types import UrlEmbedData
 from zerver.lib.user_groups import is_user_in_group
@@ -228,6 +229,18 @@ def truncate_topic(topic: str) -> str:
     return truncate_content(topic, MAX_TOPIC_NAME_LENGTH, "...")
 
 
+def translate_messages(message_content, recipient_id):
+    recipient_profile = UserProfile.objects.get(id=recipient_id)
+
+    preferred_language = recipient_profile.preferred_language
+    print(f"Recepient_id is ", recipient_profile.recipient)
+    print(f"recipient_profile.preferred_language", preferred_language)
+
+    translated_content = translate_message(message_content, preferred_language)
+
+    return translated_content
+
+
 def messages_for_ids(
     message_ids: List[int],
     user_message_flags: Dict[int, List[str]],
@@ -268,7 +281,7 @@ def messages_for_ids(
     for message in message_list:
         # Extract the content of the message
         message_content = message['content']
-        user_id= message['recipient_id']
+        user_id = message['recipient_id']
         translated_message = translate_messages(message_content, user_id)
         message['content'] = translated_message
 
