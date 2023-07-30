@@ -263,6 +263,7 @@ def messages_for_ids(
         message_list.append(msg_dict)
 
     MessageDict.post_process_dicts(message_list, apply_markdown, client_gravatar)
+    print(f"Post process dicts....... \n", message_list)
 
     return message_list
 
@@ -369,6 +370,7 @@ class MessageDict:
 
         return obj
 
+
     @staticmethod
     def post_process_dicts(
         objs: List[Dict[str, Any]], apply_markdown: bool, client_gravatar: bool
@@ -386,6 +388,8 @@ class MessageDict:
 
         for obj in objs:
             MessageDict.finalize_payload(obj, apply_markdown, client_gravatar, skip_copy=True)
+
+
 
     @staticmethod
     def finalize_payload(

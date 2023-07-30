@@ -222,7 +222,7 @@ def get_messages_backend(
         client_gravatar=client_gravatar,
         allow_edit_history=realm.allow_edit_history,
     )
-   # print(f"message list............ \n", message_list)
+    # print(f"message list............ \n", message_list)
     ret = dict(
         messages=message_list,
         result="success",
@@ -233,7 +233,7 @@ def get_messages_backend(
         history_limited=query_info.history_limited,
         anchor=anchor,
     )
-   # print("f... Returning Dict json request......json_success(request, data=ret) \n ", ret)
+    # print("f... Returning Dict json request......json_success(request, data=ret) \n ", ret)
     return json_success(request, data=ret)
 
 

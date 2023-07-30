@@ -1545,7 +1545,6 @@ def check_message(
     message.recipient = recipient
 
     message.content = original_message
-    
 
     message.realm = realm
     if addressee.is_stream():
