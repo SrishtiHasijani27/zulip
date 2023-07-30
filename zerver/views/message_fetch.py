@@ -222,6 +222,7 @@ def get_messages_backend(
         client_gravatar=client_gravatar,
         allow_edit_history=realm.allow_edit_history,
     )
+    print(f"mesaage_list========",message_list)
 
     ret = dict(
         messages=message_list,

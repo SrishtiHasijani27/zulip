@@ -28,7 +28,6 @@ from psycopg2.sql import SQL
 
 from analytics.lib.counts import COUNT_STATS
 from analytics.models import RealmCount
-
 from zerver.lib.avatar import get_avatar_field
 from zerver.lib.cache import (
     cache_set_many,
@@ -51,7 +50,6 @@ from zerver.lib.stream_subscription import (
 from zerver.lib.streams import get_web_public_streams_queryset
 from zerver.lib.timestamp import datetime_to_timestamp
 from zerver.lib.topic import DB_TOPIC_NAME, MESSAGE__TOPIC, TOPIC_LINKS, TOPIC_NAME
-from zerver.lib.translate import translate_message
 from zerver.lib.types import DisplayRecipientT, EditHistoryEvent, UserDisplayRecipient
 from zerver.lib.url_preview.types import UrlEmbedData
 from zerver.lib.user_groups import is_user_in_group
@@ -249,24 +247,11 @@ def messages_for_ids(
         extractor=extract_message_dict,
         setter=stringify_message_dict,
     )
-    sorted_message_ids = sorted(
-        message_ids,
-        key=lambda message_id: message_dicts[message_id]["timestamp"],
-        reverse=True,
-    )
+
     message_list: List[Dict[str, Any]] = []
-    translated_count = 0
-    max_messages = 5
-    # print(f"message list is message_list: List[Dict[str, Any]] = []", message_list)
 
-    for message_id in sorted_message_ids:
+    for message_id in message_ids:
         msg_dict = message_dicts[message_id]
-        # Extract recipient_id, recipient_type_id, and content from the message dictionary
-        recipient_type_id = msg_dict.get("recipient_type_id")
-        recipient_id = msg_dict.get("recipient_id")
-        rendered_content = msg_dict.get("rendered_content")
-
-        # print(f"  msg_dict = message_dicts[message_id]",msg_dict)
         msg_dict.update(flags=user_message_flags[message_id])
         if message_id in search_fields:
             msg_dict.update(search_fields[message_id])
@@ -274,50 +259,11 @@ def messages_for_ids(
         # in realms with allow_edit_history disabled.
         if "edit_history" in msg_dict and not allow_edit_history:
             del msg_dict["edit_history"]
-
-
-
-        #message_list.append(msg_dict) # # If the recipient_type_id exists and the content is not empty, perform translation
-        # if recipient_type_id and rendered_content and translated_count < max_messages:
-        #     translated_content = translate_messages(rendered_content, recipient_type_id)
-        #     msg_dict["rendered_content"] = translated_content
-        #     translated_count += 1
-        #     print(f"Translated content for each recipient", translated_content)
-        #
-        # message_list.append(msg_dict)
-        # if translated_count >= max_messages:
-        #     break
+        message_list.append(msg_dict)
 
     MessageDict.post_process_dicts(message_list, apply_markdown, client_gravatar)
-    # print(f"Post process dicts....... \n", message_list)
-    #  translate_message_content(message_list)
-    #  # for msg_list in message_list
+
     return message_list
-
-
-def translate_messages(message_content, recipient_id):
-    print(f"recipient_id=========", recipient_id)
-    recipient_profile = UserProfile.objects.get(id=recipient_id)
-    print(f"Recepient profile=========", recipient_profile)
-
-    preferred_language = recipient_profile.preferred_language
-    print(f"Recepient_id is ", recipient_profile.recipient)
-    print(f"recipient_profile.preferred_language", preferred_language)
-
-    translated_content = translate_message(message_content, preferred_language)
-
-    return translated_content
-
-
-#
-#
-# def extract_recipient_ids(message):
-#     display_recipient = message.get('display_recipient')
-#     if isinstance(display_recipient, list):
-#         recipient_ids = [recipient['id'] for recipient in display_recipient]
-#     else:
-#         recipient_ids = []
-#     return recipient_ids
 
 
 def sew_messages_and_reactions(
@@ -466,9 +412,7 @@ class MessageDict:
         MessageDict.set_sender_avatar(obj, client_gravatar)
         if apply_markdown:
             obj["content_type"] = "text/html"
-            # print(f"keep_rendered_content.............  \n", obj["rendered_content"])
             obj["content"] = obj["rendered_content"]
-
         else:
             obj["content_type"] = "text/x-markdown"
 
@@ -530,7 +474,6 @@ class MessageDict:
                 "edit_history": message.edit_history,
                 "content": message.content,
                 "rendered_content": message.rendered_content,
-
                 "rendered_content_version": message.rendered_content_version,
                 "recipient_id": message.recipient.id,
                 "recipient__type": message.recipient.type,
@@ -583,7 +526,6 @@ class MessageDict:
             topic_name=row[DB_TOPIC_NAME],
             date_sent=row["date_sent"],
             rendered_content=row["rendered_content"],
-
             rendered_content_version=row["rendered_content_version"],
             sender_id=row["sender_id"],
             sender_realm_id=row["sender__realm_id"],
@@ -594,7 +536,6 @@ class MessageDict:
             recipient_type_id=row["recipient__type_id"],
             reactions=row["reactions"],
             submessages=row["submessages"],
-
         )
 
     @staticmethod
@@ -616,11 +557,11 @@ class MessageDict:
         recipient_type_id: int,
         reactions: List[RawReactionRow],
         submessages: List[Dict[str, Any]],
-
     ) -> Dict[str, Any]:
         obj = dict(
             id=message_id,
             sender_id=sender_id,
+            content=content,
             recipient_type_id=recipient_type_id,
             recipient_type=recipient_type,
             recipient_id=recipient_id,
@@ -1043,7 +984,7 @@ def render_markdown(
         mention_data=mention_data,
         email_gateway=email_gateway,
     )
-    # print(f"Rendering result in message.py ", rendering_result)
+
     return rendering_result
 
 
@@ -1382,8 +1323,8 @@ def apply_unread_message_event(
             stream_id not in state["muted_stream_ids"]
             # This next check hits the database.
             and not topic_has_visibility_policy(
-            user_profile, stream_id, topic, UserTopic.VisibilityPolicy.MUTED
-        )
+                user_profile, stream_id, topic, UserTopic.VisibilityPolicy.MUTED
+            )
         ):
             state["unmuted_stream_msgs"].add(message_id)
 
@@ -1671,8 +1612,8 @@ def get_recent_private_conversations(user_profile: UserProfile) -> Dict[int, Dic
     # Now we need to map all the recipient_id objects to lists of user IDs
     for recipient_id, user_profile_id in (
         Subscription.objects.filter(recipient_id__in=recipient_map.keys())
-            .exclude(user_profile_id=user_profile.id)
-            .values_list("recipient_id", "user_profile_id")
+        .exclude(user_profile_id=user_profile.id)
+        .values_list("recipient_id", "user_profile_id")
     ):
         recipient_map[recipient_id]["user_ids"].append(user_profile_id)
 

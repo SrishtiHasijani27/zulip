@@ -59,7 +59,7 @@ function process_result(data, opts) {
     stream_list.maybe_scroll_narrow_into_view();
 
 
-    console.log("")
+
 
     if (
         opts.msg_list === message_lists.current &&
