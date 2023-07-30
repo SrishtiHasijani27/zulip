@@ -1,5 +1,5 @@
 import re
-
+import emoji
 from translate import Translator
 
 
@@ -25,9 +25,9 @@ def translate_message(message, target_language):
     translator = Translator(to_lang=target_language)
     translated_message = translator.translate(message_without_emojis)
 
-    # Reinsert the emojis back into the translated message
+    # Reinsert the emojis back into the translated message (with lowercase)
     for emoji in emojis:
-        translated_message += emoji
+        translated_message += emoji.lower()
 
     # Replace the placeholders with the original links
     for i, link in enumerate(links):
