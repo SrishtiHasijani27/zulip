@@ -271,9 +271,9 @@ def messages_for_ids(
             del msg_dict["edit_history"]
 
         # If the recipient_type_id exists and the content is not empty, perform translation
-        if recipient_type_id and message_content:
-            translated_content = translate_messages(message_content, recipient_id)
-            msg_dict["content"] = translated_content
+        if recipient_type_id and rendered_content:
+            translated_content = translate_messages(rendered_content, recipient_id)
+            msg_dict["rendered_content"] = translated_content
             print(f"Translated content for each recipient", translated_content)
 
         message_list.append(msg_dict)
