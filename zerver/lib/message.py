@@ -249,8 +249,13 @@ def messages_for_ids(
         extractor=extract_message_dict,
         setter=stringify_message_dict,
     )
-
+    sorted_message_ids = sorted(
+        message_ids,
+        key=lambda message_id: message_dicts[message_id]["timestamp"],
+        reverse=True,
+    )
     message_list: List[Dict[str, Any]] = []
+    translated_count = 0
     # print(f"message list is message_list: List[Dict[str, Any]] = []", message_list)
 
     for message_id in message_ids:
@@ -271,7 +276,7 @@ def messages_for_ids(
             del msg_dict["edit_history"]
 
         # If the recipient_type_id exists and the content is not empty, perform translation
-        if recipient_type_id and rendered_content:
+        if recipient_type_id and rendered_content and translated_count < 30:
             translated_content = translate_messages(rendered_content, recipient_type_id)
             msg_dict["rendered_content"] = translated_content
             print(f"Translated content for each recipient", translated_content)
