@@ -1,5 +1,6 @@
 import re
 from translate import Translator
+import emoji
 
 
 def extract_emojis(text):
