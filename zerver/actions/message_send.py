@@ -680,7 +680,7 @@ def build_message_send_dict(
         disable_external_notifications=disable_external_notifications,
 
     )
-    print(f"Message Send dict in sendMessage is ", message_send_dict)
+    # print(f"Message Send dict in sendMessage is ", message_send_dict)
 
     return message_send_dict
 
@@ -1593,7 +1593,7 @@ def check_message(
         disable_external_notifications=disable_external_notifications,
 
     )
-    print(f"Check Message ", message_send_dict)
+    # print(f"Check Message ", message_send_dict)
 
     if (
         stream is not None

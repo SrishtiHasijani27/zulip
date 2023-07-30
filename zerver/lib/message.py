@@ -255,6 +255,12 @@ def messages_for_ids(
 
     for message_id in message_ids:
         msg_dict = message_dicts[message_id]
+        # Extract recipient_id, recipient_type_id, and content from the message dictionary
+        recipient_type_id = msg_dict.get("recipient_type_id", None)
+        recipient_id = msg_dict.get("recipient_id", None)
+        message_content = msg_dict.get("content", "")
+        print(f"message_content = ==========\n",message_content)
+
         # print(f"  msg_dict = message_dicts[message_id]",msg_dict)
         msg_dict.update(flags=user_message_flags[message_id])
         if message_id in search_fields:
@@ -263,11 +269,6 @@ def messages_for_ids(
         # in realms with allow_edit_history disabled.
         if "edit_history" in msg_dict and not allow_edit_history:
             del msg_dict["edit_history"]
-
-            # Extract recipient_id, recipient_type_id, and content from the message dictionary
-        recipient_type_id = msg_dict.get("recipient_type_id", None)
-        recipient_id = msg_dict.get("recipient_id", None)
-        message_content = msg_dict.get("content", "")
 
         # If the recipient_type_id exists and the content is not empty, perform translation
         if recipient_type_id and message_content:
@@ -1032,7 +1033,7 @@ def render_markdown(
         mention_data=mention_data,
         email_gateway=email_gateway,
     )
-    print(f"Rendering result in message.py ", rendering_result)
+    # print(f"Rendering result in message.py ", rendering_result)
     return rendering_result
 
 
