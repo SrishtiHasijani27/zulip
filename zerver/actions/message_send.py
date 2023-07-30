@@ -646,7 +646,7 @@ def build_message_send_dict(
     default_bot_user_ids = info.default_bot_user_ids
     mentioned_bot_user_ids = default_bot_user_ids & mentioned_user_ids
     info.um_eligible_user_ids |= mentioned_bot_user_ids
-    message.translated_content = message.translated_content
+    # message.translated_content = message.translated_content
     message_send_dict = SendMessageRequest(
         stream=stream,
         local_id=local_id,
@@ -929,8 +929,13 @@ def do_send_messages(
     # * Implementing the Welcome Bot reply hack
     # * Adding links to the embed_links queue for open graph processing.
     for send_request in send_message_requests:
+        original_message = send_request.message.rendered_content
+        print(f"original_message=========", original_message)
+        recipient_type_id = send_request.message.recipient.type_id
         # send_request.message.content = send_request.message.translated_content
-        send_request.message.rendered_content = send_request.message.translated_content
+        translated_message = translate_messages(original_message, recipient_type_id)
+        send_request.message.rendered_content = translated_message
+        print(f"translated_message=========", translated_message)
 
         print(f"Message translated before save", send_request.message.content)
         realm_id: Optional[int] = None
@@ -1538,15 +1543,15 @@ def check_message(
 
     original_message = message_content
     message.recipient = recipient
-    print(f"recepient name is ", recipient)
-    print(f"Original message before translation",original_message)
-
-    translated_message = translate_messages(original_message, message.recipient.type_id)
-    print(f"translate_message", translated_message)
+    # print(f"recepient name is ", recipient)
+    # print(f"Original message before translation", original_message)
+    #
+    # translated_message = translate_messages(original_message, message.recipient.type_id)
+    # print(f"translate_message", translated_message)
     message.content = original_message
-    message.translated_content = translated_message
-    print(f"Translated message in check_message()",translated_message)
-    # assert message.translated_content is translated_message
+    # message.translated_content = translated_message
+    # print(f"Translated message in check_message()", translated_message)
+    # # assert message.translated_content is translated_message
 
     # message.content = str(original_message)
     # message.translated_content = str(translated_message)
