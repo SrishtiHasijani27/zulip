@@ -255,6 +255,7 @@ def messages_for_ids(
 
     for message_id in message_ids:
         msg_dict = message_dicts[message_id]
+        print(f"  msg_dict = message_dicts[message_id]",msg_dict)
         msg_dict.update(flags=user_message_flags[message_id])
         if message_id in search_fields:
             msg_dict.update(search_fields[message_id])
@@ -264,8 +265,9 @@ def messages_for_ids(
             del msg_dict["edit_history"]
 
             # Extract recipient_id and content from the message dictionary
-        message_content = msg_dict["content"]
-        print(f"  message_content = msg_dict[content]", message_content)
+        # message_content = msg_dict["content"]
+        #
+        # print(f"  message_content = msg_dict[content]", message_content)
         # recipient_id = msg_dict["recipient_id"]
         # message_content = msg_dict["content"]
         # print(f"  message_content = msg_dict[content]",message_content)
