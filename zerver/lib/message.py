@@ -279,16 +279,26 @@ def messages_for_ids(
 
     MessageDict.post_process_dicts(message_list, apply_markdown, client_gravatar)
     print(f"Post process dicts....... \n", message_list)
+    translate_messages(message_list)
     # for msg_list in message_list
+    return message_list
 
+
+def translate_message_content(message_list):
+    # Assuming message_list contains the list of messages
     for message in message_list:
-        # Extract the content of the message
-        message_content = message['content']
-
+        # Extract recipient IDs from the 'display_recipient' field
         recipient_ids = extract_recipient_ids(message)
+
+        # Translate the content of the message for each recipient
+        translated_contents = []
+        message_content = message['content']
         for user_id in recipient_ids:
-        translated_message = translate_messages(message_content, user_id)
-        message['content'] = translated_message
+            translated_message = translate_messages(message_content, user_id)
+            translated_contents.append(translated_message)
+
+        # Update the message content with the translated content
+        message['content'] = translated_contents
 
     return message_list
 
