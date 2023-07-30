@@ -251,7 +251,7 @@ def messages_for_ids(
     )
 
     message_list: List[Dict[str, Any]] = []
-    print(f"message list is message_list: List[Dict[str, Any]] = []", message_list)
+   # print(f"message list is message_list: List[Dict[str, Any]] = []", message_list)
 
     for message_id in message_ids:
         msg_dict = message_dicts[message_id]
@@ -264,8 +264,10 @@ def messages_for_ids(
             del msg_dict["edit_history"]
 
             # Extract recipient_id and content from the message dictionary
+
         recipient_id = msg_dict["recipient_id"]
         message_content = msg_dict["content"]
+        print(f"  message_content = msg_dict[content]",message_content)
 
         # Call the translate_content method here with recipient_id and content
         translated_content = translate_messages(message_content, recipient_id)
