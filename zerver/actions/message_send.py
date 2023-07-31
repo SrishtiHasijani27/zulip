@@ -928,16 +928,7 @@ def do_send_messages(
     # * Updating the `first_message_id` field for streams without any message history.
     # * Implementing the Welcome Bot reply hack
     # * Adding links to the embed_links queue for open graph processing.
-    for send_request in send_message_requests:
-        original_message = send_request.message.rendered_content
-        print(f"original_message=========", original_message)
-        recipient_type_id = send_request.message.recipient.type_id
-        # send_request.message.content = send_request.message.translated_content
-        translated_message = translate_messages(original_message, recipient_type_id)
-        send_request.message.rendered_content = translated_message
-        print(f"translated_message=========", translated_message)
 
-        print(f"Message translated before save", send_request.message.content)
         realm_id: Optional[int] = None
         if send_request.message.is_stream_message():
             if send_request.stream is None:
@@ -1103,7 +1094,16 @@ def do_send_messages(
 
         # send_request.message.content = send_request.message.translated_content
         # send_request.message.rendered_content = None  # Clear the rendered content to force
+        for send_request in send_message_requests:
+            original_message = send_request.message.rendered_content
+            print(f"original_message=========", original_message)
+            recipient_type_id = send_request.message.recipient.type_id
+            # send_request.message.content = send_request.message.translated_content
+            translated_message = translate_messages(original_message, recipient_type_id)
+            send_request.message.rendered_content = translated_message
+            print(f"translated_message=========", translated_message)
 
+            print(f"Message translated before save", send_request.message.content)
         for queue_name, events in send_request.service_queue_events.items():
             for event in events:
                 queue_json_publish(
