@@ -937,7 +937,7 @@ def do_send_messages(
             # assert needed because stubs for django are missing
             assert send_request.stream is not None
             realm_id = send_request.stream.realm_id
-
+        for send_request in send_message_requests:
             original_message = send_request.message.rendered_content
             print(f"original_message========= \n", original_message)
 
