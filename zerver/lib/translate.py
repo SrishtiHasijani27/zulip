@@ -13,9 +13,22 @@ def remove_links(message):
     return re.sub(link_pattern, '', message)
 
 
+def detect_source_language(message):
+    detected_languages = detect_langs(message)
+    if detected_languages:
+        detected_language = detected_languages[0].lang
+        confidence_score = detected_languages[0].prob
+        print(f"Detected Language: {detected_language}, Confidence: {confidence_score}")
+        return detected_language
+    else:
+        print("Language detection failed.")
+        return None
+
+
 def translate_message(message, target_language):
     # Detect the source language of the message
-    source_language = detect(message)
+    source_language = detect_source_language(message)
+    
 
     # Extract emojis from the message
     emojis = extract_emojis(message)

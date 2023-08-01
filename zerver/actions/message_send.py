@@ -599,7 +599,7 @@ def build_message_send_dict(
         email_gateway=email_gateway,
     )
     message.rendered_content = rendering_result.rendered_content
-    print(f"message.rendered_content", message.rendered_content)
+
     message.rendered_content_version = markdown_version
     links_for_embed = rendering_result.links_for_preview
 
