@@ -1,6 +1,6 @@
 import re
 from translate import Translator
-from langdetect import detect
+from langdetect import detect_langs
 
 
 def extract_emojis(text):
@@ -28,7 +28,6 @@ def detect_source_language(message):
 def translate_message(message, target_language):
     # Detect the source language of the message
     source_language = detect_source_language(message)
-    
 
     # Extract emojis from the message
     emojis = extract_emojis(message)
