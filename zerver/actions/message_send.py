@@ -1092,7 +1092,8 @@ def do_send_messages(
         # send_request.message.rendered_content = None  # Clear the rendered content to force
         for send_request in send_message_requests:
             original_message = send_request.message.content
-            print(f"original_message=========", original_message)
+            print(f"original_message========= \n", original_message)
+            
             recipient_type_id = send_request.message.recipient.type_id
             # send_request.message.content = send_request.message.translated_content
             translated_message = translate_messages(original_message, recipient_type_id)
