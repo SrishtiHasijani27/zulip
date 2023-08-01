@@ -2951,7 +2951,7 @@ class AbstractMessage(models.Model):
     content = models.TextField()
 
     rendered_content = models.TextField(null=True)
-    translated_content = models.TextField(null=True)
+    #translated_content = models.TextField(null=True)
     rendered_content_version = models.IntegerField(null=True)
 
     date_sent = models.DateTimeField("date sent", db_index=True)
@@ -3046,8 +3046,8 @@ class Message(AbstractMessage):
     def save_rendered_content(self) -> None:
         self.save(update_fields=["rendered_content", "rendered_content_version"])
 
-    def save_translated_content(self) -> None:
-        self.save(update_fields=["translated_content"])
+    #def save_translated_content(self) -> None:
+     #   self.save(update_fields=["translated_content"])
 
     @staticmethod
     def need_to_render_content(
@@ -4357,7 +4357,7 @@ class ScheduledMessage(models.Model):
     subject = models.CharField(max_length=MAX_TOPIC_NAME_LENGTH)
     content = models.TextField()
     rendered_content = models.TextField()
-    translated_content = models.TextField(null=True)
+    #translated_content = models.TextField(null=True)
     sending_client = models.ForeignKey(Client, on_delete=CASCADE)
     stream = models.ForeignKey(Stream, null=True, on_delete=CASCADE)
     realm = models.ForeignKey(Realm, on_delete=CASCADE)
