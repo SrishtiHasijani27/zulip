@@ -106,7 +106,7 @@ def same_realm_irc_user(user_profile: UserProfile, email: str) -> bool:
 
     domain = Address(addr_spec=email).domain.lower()
     if domain.startswith("irc."):
-        domain = domain[len("irc.") :]
+        domain = domain[len("irc."):]
 
     # Assumes allow_subdomains=False for all RealmDomain's corresponding to
     # these realms.
@@ -138,6 +138,7 @@ def send_message_backend(
     forged_str: Optional[str] = REQ("forged", default=None, documentation_pending=True),
     topic_name: Optional[str] = REQ_topic(),
     message_content: str = REQ("content"),
+    # message_content: str = REQ("translated_content"),
     widget_content: Optional[str] = REQ(default=None, documentation_pending=True),
     local_id: Optional[str] = REQ(default=None),
     queue_id: Optional[str] = REQ(default=None),

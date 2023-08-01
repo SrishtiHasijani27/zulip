@@ -23,6 +23,8 @@ import * as stream_list from "./stream_list";
 import * as stream_topic_history from "./stream_topic_history";
 import * as transmit from "./transmit";
 import * as util from "./util";
+import {message_content} from "./compose_state";
+import {is_current_user} from "./people";
 
 // Docs: https://zulip.readthedocs.io/en/latest/subsystems/sending-messages.html
 
@@ -41,6 +43,7 @@ function show_retry_spinner($row) {
     }
     return true;
 }
+
 
 function hide_retry_spinner($row) {
     const $retry_spinner = $row.find(".refresh-failed-message");
@@ -179,7 +182,10 @@ export function insert_local_message(message_request, local_id_float, insert_new
     // Keep this in sync with changes to compose.create_message_object
     const message = {...message_request};
 
+    message.original_content = message.content;
     message.raw_content = message.content;
+    console.log("Message is  ",message.raw_content)
+    console.log("User details is...:",message.local_id)
 
     // NOTE: This will parse synchronously. We're not using the async pipeline
     markdown.apply_markdown(message);
@@ -210,6 +216,7 @@ export function is_slash_command(content) {
 
 export function try_deliver_locally(message_request, insert_new_messages) {
     if (markdown.contains_backend_only_syntax(message_request.content)) {
+        console.log("try_deliver_locally called")
         return undefined;
     }
 
@@ -261,7 +268,10 @@ export function try_deliver_locally(message_request, insert_new_messages) {
         compose_ui.make_compose_box_original_size();
     }
 
+
     const message = insert_local_message(message_request, local_id_float, insert_new_messages);
+    console.log("try deliver locally....", message)
+
     return message;
 }
 
@@ -387,6 +397,9 @@ export function process_from_server(messages) {
 
         const local_id = message.local_id;
         const client_message = waiting_for_ack.get(local_id);
+
+
+
         if (client_message === undefined) {
             // For messages that weren't locally echoed, we go through
             // the "main" codepath that doesn't have to id reconciliation.
@@ -401,11 +414,31 @@ export function process_from_server(messages) {
         if (message_store.get(message.id).failed_request) {
             failed_message_success(message.id);
         }
+        let isSender = false;
+        const isCurrentUser = people.is_current_user(message.sender_email )
+        console.log("isCurrent User", isCurrentUser)
+        console.log("Sender Email is ",message.sender_email)
 
-        if (client_message.content !== message.content) {
-            client_message.content = message.content;
-            sent_messages.mark_disparity(local_id);
-        }
+        console.log("people.my_current_email()..............value", people.my_current_email())
+        console.log("const isSender", !(isSender))
+
+            if (client_message.content !== message.content) {
+                   if (isCurrentUser)
+                   {
+                        client_message.content = client_message.content
+                        sent_messages.mark_disparity(local_id);
+
+                   }
+                   else{
+                    client_message.content = message.content;
+                    console.log("Client message.....", client_message.content)
+                    console.log("message.content..............", message.content)
+                    console.log("Raw message......", message.raw_content)
+                    sent_messages.mark_disparity(local_id);
+                }
+            }
+
+
         sent_messages.report_event_received(local_id);
 
         message_store.update_booleans(client_message, message.flags);
@@ -426,21 +459,39 @@ export function process_from_server(messages) {
         client_message.topic_links = message.topic_links;
         client_message.is_me_message = message.is_me_message;
         client_message.submessages = message.submessages;
+        console.log("client_message.submessages ",client_message.submessages)
+
+        //message.raw_content = waiting_for_ack.get(local_id).raw_content;
+        //client_message.content = message.raw_content;
+        console.log("Finally cilent message is ",client_message.content)
 
         msgs_to_rerender.push(client_message);
-        waiting_for_ack.delete(local_id);
+         waiting_for_ack.delete(local_id);
+
+
     }
 
     if (msgs_to_rerender.length > 0) {
         // In theory, we could just rerender messages where there were
         // changes in either the rounded timestamp we display or the
-        // message content, but in practice, there's no harm to just
+         // message content, but in practice, there's no harm to just
         // doing it unconditionally.
+
+        console.log("Message to render/........",msgs_to_rerender)
         for (const msg_list of message_lists.all_rendered_message_lists()) {
             msg_list.view.rerender_messages(msgs_to_rerender);
-        }
-    }
 
+
+        }
+
+    }
+       for (const message of non_echo_messages) {
+           console.log("const message of non_echo_messages", message.content)
+        }
+
+
+
+        console.log("non echo message is ", non_echo_messages)
     return non_echo_messages;
 }
 
@@ -474,6 +525,11 @@ export function display_slow_send_loading_spinner(message) {
     }
 }
 
+
+
+
+
+
 export function initialize({on_send_message_success}) {
     function on_failed_action(selector, callback) {
         $("#main_div").on("click", selector, function (e) {
@@ -498,3 +554,4 @@ export function initialize({on_send_message_success}) {
     on_failed_action(".remove-failed-message", abort_message);
     on_failed_action(".refresh-failed-message", resend_message);
 }
+

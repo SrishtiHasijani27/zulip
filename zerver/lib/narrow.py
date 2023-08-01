@@ -1203,7 +1203,7 @@ def post_process_limited_query(
         after_rows = [r for r in visible_rows if r[0] > anchor]
 
     if num_before:
-        before_rows = before_rows[-1 * num_before :]
+        before_rows = before_rows[-1 * num_before:]
 
     if num_after:
         after_rows = after_rows[:num_after]
@@ -1342,6 +1342,7 @@ def fetch_messages(
         first_visible_message_id=first_visible_message_id,
     )
 
+
     return FetchedMessages(
         rows=query_info.rows,
         found_anchor=query_info.found_anchor,
@@ -1352,3 +1353,6 @@ def fetch_messages(
         include_history=include_history,
         is_search=is_search,
     )
+
+
+

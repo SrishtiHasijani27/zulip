@@ -33,6 +33,8 @@ const consts = {
 
 function process_result(data, opts) {
     let messages = data.messages;
+    console.log("Show data.messages",data.messages)
+
 
     messages = messages.map((message) => message_helper.process_new_message(message));
 
@@ -55,6 +57,9 @@ function process_result(data, opts) {
     recent_topics_ui.process_messages(messages);
     stream_list.update_streams_sidebar();
     stream_list.maybe_scroll_narrow_into_view();
+
+
+
 
     if (
         opts.msg_list === message_lists.current &&
@@ -89,6 +94,7 @@ function process_result(data, opts) {
 }
 
 function get_messages_success(data, opts) {
+
     const update_loading_indicator = opts.msg_list === message_lists.current;
     if (opts.num_before > 0) {
         opts.msg_list.data.fetch_status.finish_older_batch({

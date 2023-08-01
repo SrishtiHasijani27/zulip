@@ -222,6 +222,7 @@ export function send_message(request = create_message_object()) {
         // approximation of the id we'll get from the server
         // in terms of sorting messages.
         local_id = message.local_id;
+        console.log("message content------", message.raw_content);
         locally_echoed = true;
     } else {
         // We are not rendering this message locally, but we
@@ -265,6 +266,7 @@ export function send_message(request = create_message_object()) {
         // message would send. Ensure that the displayed count is correct.
         drafts.sync_count();
     }
+    console.log("transmit success....",request.content)
 
     transmit.send_message(request, success, error);
     server_events.assert_get_events_running(
@@ -309,6 +311,8 @@ export function finish(scheduling_message = false) {
     compose_banner.clear_message_sent_banners();
 
     const message_content = compose_state.message_content();
+
+    console.log("Testing purpose ", message_content)
 
     // Skip normal validation for zcommands, since they aren't
     // actual messages with recipients; users only send them

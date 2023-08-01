@@ -565,7 +565,9 @@ export function dispatch_normal_event(event) {
                 msg_type: event.msg_type,
                 message_id: event.message_id,
                 content: event.content,
+
             };
+               console.log("message is.....",event.content)
             submessage.handle_event(submsg);
             break;
         }

@@ -60,12 +60,14 @@ function get_or_set(fieldname, keep_leading_whitespace, no_trim) {
         const oldval = $elem.val();
         if (newval !== undefined) {
             $elem.val(newval);
+
         }
         if (no_trim) {
             return oldval;
         } else if (keep_leading_whitespace) {
             return oldval.trimEnd();
         }
+
         return oldval.trim();
     };
 }
@@ -118,6 +120,7 @@ export const topic = get_or_set("stream_message_recipient_topic");
 // We can't trim leading whitespace in `compose_textarea` because
 // of the indented syntax for multi-line code blocks.
 export const message_content = get_or_set("compose-textarea", true);
+
 
 const untrimmed_message_content = get_or_set("compose-textarea", true, true);
 

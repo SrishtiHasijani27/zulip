@@ -72,6 +72,8 @@ def get_search_fields(
     content_matches: Iterable[Tuple[int, int]],
     topic_matches: Iterable[Tuple[int, int]],
 ) -> Dict[str, str]:
+    print(f"highlight_string(rendered_content, rendered_content),", rendered_content)
+    print(f"highlight_string(content_matches, content_matches),", content_matches)
     return {
         "match_content": highlight_string(rendered_content, content_matches),
         MATCH_TOPIC: highlight_string(escape_html(topic_name), topic_matches),
@@ -220,6 +222,7 @@ def get_messages_backend(
         client_gravatar=client_gravatar,
         allow_edit_history=realm.allow_edit_history,
     )
+    print(f"mesaage_list========",message_list)
 
     ret = dict(
         messages=message_list,
@@ -231,6 +234,7 @@ def get_messages_backend(
         history_limited=query_info.history_limited,
         anchor=anchor,
     )
+    # print("f... Returning Dict json request......json_success(request, data=ret) \n ", ret)
     return json_success(request, data=ret)
 
 

@@ -148,6 +148,7 @@ def render_incoming_message(
     email_gateway: bool = False,
 ) -> MessageRenderingResult:
     realm_alert_words_automaton = get_alert_word_automaton(realm)
+
     try:
         rendering_result = render_markdown(
             message=message,
@@ -305,8 +306,8 @@ def get_recipient_info(
                 if user_id_to_visibility_policy.get(
                     row["user_profile_id"], UserTopic.VisibilityPolicy.INHERIT
                 )
-                == UserTopic.VisibilityPolicy.FOLLOWED
-                and row["followed_topic_" + setting]
+                   == UserTopic.VisibilityPolicy.FOLLOWED
+                   and row["followed_topic_" + setting]
             }
 
         followed_topic_email_user_ids = followed_topic_notification_recipients(
@@ -549,6 +550,7 @@ def build_message_send_dict(
     mention_backend: Optional[MentionBackend] = None,
     limit_unread_user_ids: Optional[Set[int]] = None,
     disable_external_notifications: bool = False,
+
 ) -> SendMessageRequest:
     """Returns a dictionary that can be passed into do_send_messages.  In
     production, this is always called by check_message, but some
@@ -564,6 +566,7 @@ def build_message_send_dict(
     mention_data = MentionData(
         mention_backend=mention_backend,
         content=message.content,
+
     )
 
     if message.is_stream_message():
@@ -596,6 +599,7 @@ def build_message_send_dict(
         email_gateway=email_gateway,
     )
     message.rendered_content = rendering_result.rendered_content
+    print(f"message.rendered_content", message.rendered_content)
     message.rendered_content_version = markdown_version
     links_for_embed = rendering_result.links_for_preview
 
@@ -642,7 +646,7 @@ def build_message_send_dict(
     default_bot_user_ids = info.default_bot_user_ids
     mentioned_bot_user_ids = default_bot_user_ids & mentioned_user_ids
     info.um_eligible_user_ids |= mentioned_bot_user_ids
-
+    # message.translated_content = message.translated_content
     message_send_dict = SendMessageRequest(
         stream=stream,
         local_id=local_id,
@@ -674,7 +678,9 @@ def build_message_send_dict(
         widget_content=widget_content_dict,
         limit_unread_user_ids=limit_unread_user_ids,
         disable_external_notifications=disable_external_notifications,
+
     )
+    # print(f"Message Send dict in sendMessage is ", message_send_dict)
 
     return message_send_dict
 
@@ -855,8 +861,18 @@ def do_send_messages(
             ):
                 send_request.message.has_attachment = True
                 send_request.message.save(update_fields=["has_attachment"])
+        # for send_request in send_message_requests:
+
+        # if send_request.message.recipient.type == Recipient.PERSONAL:
+        #     if send_request.message.sender_id != send_request.message.recipient_id:
+        #         # For messages sent to others, show the translated content to the receiver
+        #         send_request.message.content = send_request.message.translated_content
+        #         send_request.message.rendered_content = None  # Clear the rendered content to force
+        #         # re-rendering
+        #     # Otherwise, do nothing for the sender; they will see the original content
 
         ums: List[UserMessageLite] = []
+
         for send_request in send_message_requests:
             # Service bots (outgoing webhook bots and embedded bots) don't store UserMessage rows;
             # they will be processed later.
@@ -898,6 +914,10 @@ def do_send_messages(
 
         bulk_insert_ums(ums)
 
+        # for send_request in send_message_requests:
+        #     send_request.message.content = send_request.message.translated_content
+        #     print(f"Message translated", send_request.message.content)
+
         for send_request in send_message_requests:
             do_widget_post_save_actions(send_request)
 
@@ -908,7 +928,7 @@ def do_send_messages(
     # * Updating the `first_message_id` field for streams without any message history.
     # * Implementing the Welcome Bot reply hack
     # * Adding links to the embed_links queue for open graph processing.
-    for send_request in send_message_requests:
+
         realm_id: Optional[int] = None
         if send_request.message.is_stream_message():
             if send_request.stream is None:
@@ -918,8 +938,7 @@ def do_send_messages(
             assert send_request.stream is not None
             realm_id = send_request.stream.realm_id
 
-        # Deliver events to the real-time push system, as well as
-        # enqueuing any additional processing triggered by the message.
+
         wide_message_dict = MessageDict.wide_dict(send_request.message, realm_id)
 
         user_flags = user_message_flags.get(send_request.message.id, {})
@@ -1067,6 +1086,20 @@ def do_send_messages(
                 send_welcome_bot_response(send_request)
 
         assert send_request.service_queue_events is not None
+        # for send_request in send_message_requests:
+
+        # send_request.message.content = send_request.message.translated_content
+        # send_request.message.rendered_content = None  # Clear the rendered content to force
+        for send_request in send_message_requests:
+            original_message = send_request.message.content
+            print(f"original_message=========", original_message)
+            recipient_type_id = send_request.message.recipient.type_id
+            # send_request.message.content = send_request.message.translated_content
+            translated_message = translate_messages(original_message, recipient_type_id)
+            send_request.message.content = translated_message
+            print(f"translated_message=========", translated_message)
+
+            print(f"Message translated before save", send_request.message.content)
         for queue_name, events in send_request.service_queue_events.items():
             for event in events:
                 queue_json_publish(
@@ -1240,11 +1273,13 @@ def check_send_message(
     skip_stream_access_check: bool = False,
 ) -> int:
     addressee = Addressee.legacy_build(sender, recipient_type_name, message_to, topic_name)
+
     try:
         message = check_message(
             sender,
             client,
             addressee,
+
             message_content,
             realm,
             forged,
@@ -1505,9 +1540,7 @@ def check_message(
     original_message = message_content
     message.recipient = recipient
 
-    translated_message = translate_messages(original_message, message.recipient.type_id)
-    print(f"translate_message", translate_message)
-    message.content = translated_message
+    message.content = original_message
 
     message.realm = realm
     if addressee.is_stream():
@@ -1554,7 +1587,9 @@ def check_message(
         mention_backend=mention_backend,
         limit_unread_user_ids=limit_unread_user_ids,
         disable_external_notifications=disable_external_notifications,
+
     )
+    # print(f"Check Message ", message_send_dict)
 
     if (
         stream is not None
@@ -1684,6 +1719,10 @@ def internal_prep_private_message(
         realm = recipient_user.realm
     else:
         realm = sender.realm
+    #
+    # receiver = recipient_user.recipient.type_id
+    # translated_msg = translate_messages(content, receiver)
+    # print(f"Message translated for receiver",translated_msg)
 
     return _internal_prep_message(
         realm=realm,
@@ -1779,7 +1818,8 @@ def translate_messages(message_content, recipient_id):
     recipient_profile = UserProfile.objects.get(id=recipient_id)
 
     preferred_language = recipient_profile.preferred_language
-    print(f"recipient_profile.preferred_language",preferred_language)
+    print(f"Recepient_id is ", recipient_profile.recipient)
+    print(f"recipient_profile.preferred_language", preferred_language)
 
     translated_content = translate_message(message_content, preferred_language)
 

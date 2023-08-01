@@ -99,6 +99,7 @@ function get_events_success(events) {
         messages = _.sortBy(messages, "id");
         try {
             messages = echo.process_from_server(messages);
+            console.log("messages======",messages)
             if (messages.length > 0) {
                 const sent_by_this_client = messages.some((msg) =>
                     sent_messages.messages.has(msg.local_id),
@@ -112,6 +113,7 @@ function get_events_success(events) {
                 // correctly.
 
                 message_events.insert_new_messages(messages, sent_by_this_client);
+
             }
         } catch (error) {
             blueslip.error("Failed to insert new messages", undefined, error);
@@ -125,6 +127,7 @@ function get_events_success(events) {
     if (update_message_events.length !== 0) {
         try {
             message_events.update_messages(update_message_events);
+            console.log("message_events.update_messages(update_message_events);")
         } catch (error) {
             blueslip.error("Failed to update messages", undefined, error);
         }
