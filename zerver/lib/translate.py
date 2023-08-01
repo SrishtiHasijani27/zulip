@@ -2,18 +2,22 @@ import re
 from translate import Translator
 import langid
 
+
 def extract_emojis(text):
     emoji_pattern = r'[^\u0000-\u007F]+'
     return ''.join(c for c in text if re.match(re.escape(emoji_pattern), c))
+
 
 def remove_links(message):
     link_pattern = r'http[s]?://\S+'
     return re.sub(link_pattern, '', message)
 
+
 def detect_source_language(message):
     detected_language, _ = langid.classify(message)
     print(f"Detected Language: {detected_language}")
     return detected_language
+
 
 def translate_message(message, target_language):
     # Detect the source language of the message
@@ -37,7 +41,8 @@ def translate_message(message, target_language):
 
         # Split the message into smaller chunks (max 500 characters each)
         chunk_size = 500
-        chunks = [message_without_p_tags[i:i + chunk_size] for i in range(0, len(message_without_p_tags), chunk_size)]
+        chunks = [message_without_p_tags[i:i + chunk_size] for i in
+                  range(0, len(message_without_p_tags), chunk_size)]
 
         translated_chunks = []
         for chunk in chunks:
@@ -56,7 +61,7 @@ def translate_message(message, target_language):
 
         # Add a line dynamically informing about the languages being translated
         info_line = f"Translating message from {source_language} to {target_language}:"
-        translated_message = f"{info_line}\n{translated_message}"
+        translated_message = f"{info_line}<br>{translated_message}"
 
     except Exception as e:
         # If translation fails, post the original message
