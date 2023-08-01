@@ -1,5 +1,6 @@
 import re
 from translate import Translator
+from langdetect import detect
 
 
 def extract_emojis(text):
@@ -13,6 +14,9 @@ def remove_links(message):
 
 
 def translate_message(message, target_language):
+    # Detect the source language of the message
+    source_language = detect(message)
+
     # Extract emojis from the message
     emojis = extract_emojis(message)
 
@@ -26,11 +30,19 @@ def translate_message(message, target_language):
     message_without_p_tags = message_without_links.replace('<p>', '').replace('</p>', '<p_placeholder>')
 
     # Translate the message without <p> tags using the translate module
-    translator = Translator(to_lang=target_language)
-    translated_message_without_p_tags = translator.translate(message_without_p_tags)
+    translator = Translator(from_lang=source_language, to_lang=target_language)
+
+    # Split the message into smaller chunks (max 500 characters each)
+    chunk_size = 500
+    chunks = [message_without_p_tags[i:i + chunk_size] for i in
+              range(0, len(message_without_p_tags), chunk_size)]
+
+    translated_chunks = []
+    for chunk in chunks:
+        translated_chunks.append(translator.translate(chunk))
 
     # Restore the <p> tags in the translated message
-    translated_message = translated_message_without_p_tags.replace('<p_placeholder>', '<p>')
+    translated_message = ''.join(translated_chunks).replace('<p_placeholder>', '<p>')
 
     # Reinsert emojis back into the translated message
     for i, emoji_char in enumerate(emojis):
@@ -39,5 +51,9 @@ def translate_message(message, target_language):
     # Replace the placeholders with the original links
     for i, link in enumerate(links):
         translated_message = translated_message.replace(f'<link_placeholder_{i}>', link)
+
+    # Add a line dynamically informing about the languages being translated
+    info_line = f"Translating message from {source_language} to {target_language}:"
+    translated_message = f"{info_line}\n{translated_message}"
 
     return translated_message
