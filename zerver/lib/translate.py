@@ -59,7 +59,7 @@ def translate_message(message, target_language):
         translated_message = translated_message.replace(f'<link_placeholder_{i}>', link)
 
     # Add a line dynamically informing about the languages being translated
-    info_line = f"Translating message from {source_language} to {target_language}:"
+    info_line = f"Translating message from {source_language} to {target_language}: \n"
     translated_message = f"{info_line}\n{translated_message}"
 
     return translated_message
