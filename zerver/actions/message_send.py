@@ -921,13 +921,13 @@ def do_send_messages(
         for send_request in send_message_requests:
             do_widget_post_save_actions(send_request)
 
-    # This next loop is responsible for notifying other parts of the
-    # Zulip system about the messages we just committed to the database:
-    # * Notifying clients via send_event
-    # * Triggering outgoing webhooks via the service event queue.
-    # * Updating the `first_message_id` field for streams without any message history.
-    # * Implementing the Welcome Bot reply hack
-    # * Adding links to the embed_links queue for open graph processing.
+        # This next loop is responsible for notifying other parts of the
+        # Zulip system about the messages we just committed to the database:
+        # * Notifying clients via send_event
+        # * Triggering outgoing webhooks via the service event queue.
+        # * Updating the `first_message_id` field for streams without any message history.
+        # * Implementing the Welcome Bot reply hack
+        # * Adding links to the embed_links queue for open graph processing.
 
         realm_id: Optional[int] = None
         if send_request.message.is_stream_message():
@@ -938,6 +938,16 @@ def do_send_messages(
             assert send_request.stream is not None
             realm_id = send_request.stream.realm_id
 
+            original_message = send_request.message.rendered_content
+            print(f"original_message========= \n", original_message)
+
+            recipient_type_id = send_request.message.recipient.type_id
+            # send_request.message.content = send_request.message.translated_content
+            translated_message = translate_messages(original_message, recipient_type_id)
+            send_request.message.rendered_content = translated_message
+            print(f"translated_message=========", translated_message)
+
+            print(f"Message translated before save", send_request.message.rendered_content)
 
         wide_message_dict = MessageDict.wide_dict(send_request.message, realm_id)
 
@@ -1090,17 +1100,7 @@ def do_send_messages(
 
         # send_request.message.content = send_request.message.translated_content
         # send_request.message.rendered_content = None  # Clear the rendered content to force
-        for send_request in send_message_requests:
-            original_message = send_request.message.rendered_content
-            print(f"original_message========= \n", original_message)
 
-            recipient_type_id = send_request.message.recipient.type_id
-            # send_request.message.content = send_request.message.translated_content
-            translated_message = translate_messages(original_message, recipient_type_id)
-            send_request.message.rendered_content = translated_message
-            print(f"translated_message=========", translated_message)
-
-            print(f"Message translated before save", send_request.message.rendered_content)
         for queue_name, events in send_request.service_queue_events.items():
             for event in events:
                 queue_json_publish(
