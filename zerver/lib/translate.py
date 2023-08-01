@@ -1,11 +1,11 @@
 import re
 from translate import Translator
-from langdetect import detect_langs
+import langid
 
 
 def extract_emojis(text):
     emoji_pattern = r'[^\u0000-\u007F]+'
-    return ''.join(c for c in text if re.match(emoji_pattern, c))
+    return ''.join(c for c in text if re.match(re.escape(emoji_pattern), c))
 
 
 def remove_links(message):
@@ -14,15 +14,9 @@ def remove_links(message):
 
 
 def detect_source_language(message):
-    detected_languages = detect_langs(message)
-    if detected_languages:
-        detected_language = detected_languages[0].lang
-        confidence_score = detected_languages[0].prob
-        print(f"Detected Language: {detected_language}, Confidence: {confidence_score}")
-        return detected_language
-    else:
-        print("Language detection failed.")
-        return None
+    detected_language, _ = langid.classify(message)
+    print(f"Detected Language: {detected_language}")
+    return detected_language
 
 
 def translate_message(message, target_language):
