@@ -2,7 +2,6 @@ import re
 from translate import Translator
 import langid
 
-
 def extract_emojis(text):
     emoji_pattern = r'[^\u0000-\u007F]+'
     return ''.join(c for c in text if re.match(re.escape(emoji_pattern), c))
@@ -45,22 +44,25 @@ def translate_message(message, target_language):
 
     translated_chunks = []
     for chunk in chunks:
-        translated_chunk = translator.translate(chunk)  # Fix here: Translate each chunk
-        translated_chunks.append(translated_chunk)
+        try:
+            translated_chunk = translator.translate(chunk)
+            translated_chunks.append(translated_chunk)
+        except StopIteration:
+            break
 
     # Restore the <p> tags in the translated message
-    translated_message_without_p_tags = ''.join(translated_chunks).replace('<p_placeholder>', '<p>')
+    translated_message = ''.join(translated_chunks).replace('<p_placeholder>', '<p>')
 
     # Reinsert emojis back into the translated message
     for i, emoji_char in enumerate(emojis):
-        translated_message_without_p_tags = translated_message_without_p_tags.replace(f'<emoji_placeholder_{i}>', emoji_char)
+        translated_message = translated_message.replace(f'<emoji_placeholder_{i}>', emoji_char)
 
     # Replace the placeholders with the original links
     for i, link in enumerate(links):
-        translated_message_without_p_tags = translated_message_without_p_tags.replace(f'<link_placeholder_{i}>', link)
+        translated_message = translated_message.replace(f'<link_placeholder_{i}>', link)
 
     # Add a line dynamically informing about the languages being translated
     info_line = f"Translating message from {source_language} to {target_language}:"
-    translated_message = f"{info_line}\n{translated_message_without_p_tags}"  
+    translated_message = f"{info_line}\n{translated_message}"
 
     return translated_message
