@@ -85,6 +85,9 @@ redis
 
 translate
 
+#langid.py used for auto detecting source language of the message
+langid
+
 # Tornado used for server->client push system
 tornado
 
